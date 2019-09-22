@@ -1,0 +1,54 @@
+version: "3.6"
+
+services:
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "supersecret"
+      MONGO_INITDB_DATABASE: "nestjs"
+    volumes:
+      - "data-volume:/data/db"
+    ports:
+      - "27017:27017"
+    # logging:
+    # driver: none
+  # install:
+  #   image: node
+  #   command: "yarn"
+  #   working_dir: /app/
+  #   volumes:
+  #     - ./:/app
+  #     - "node-modules:/app/node_modules"
+  nest-app:
+    image: node
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    command: "npm run start:dev"
+    # command: "node dist/main.js"
+    working_dir: /app/
+    # install:
+    environment:
+      PORT: "3000"
+      # TYPEORM_TYPE: "mongodb"
+      # TYPEORM_CONNECTION: "mongodb"
+      # TYPEORM_HOST: "mongo"
+      # TYPEORM_USERNAME: "root"
+      # TYPEORM_PASSWORD: "supersecret"
+      # TYPEORM_DATABASE: "nestjs"
+      # TYPEORM_PORT: "27017"
+      # TYPEORM_AUTHSOURCE: "admin"
+      # TYPEORM_SYNCHRONIZE: "true"
+      # TYPEORM_LOGGING: "true"
+      # TYPEORM_ENTITIES: "src/**/**.entity{.ts,.js}"
+    volumes:
+      - ./:/app
+      - "node-modules:/app/node_modules"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+volumes:
+  data-volume:
+  node-modules:

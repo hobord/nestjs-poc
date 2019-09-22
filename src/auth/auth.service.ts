@@ -9,37 +9,54 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
-    private logger = new Logger(AuthService.name);
-    expiresIn = 3600;
-    RSA_PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'private.pem'));
-    RSA_PUBLIC_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'public.pem'));
+  private logger = new Logger(AuthService.name);
+  expiresIn = 3600;
+  RSA_PRIVATE_KEY = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'keys', 'private.pem'),
+  );
+  RSA_PUBLIC_KEY = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'keys', 'public.pem'),
+  );
 
-    constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {}
 
-    // @todo implement secretKey and exiresIn as custom providers
-    async createToken(username: string) {
-        this.logger.log('create Token');
-        const user: JwtPayload = { username };
-        const keyid = crypto.createHash('sha256').update(this.RSA_PUBLIC_KEY).digest('hex');
+  // @todo implement secretKey and exiresIn as custom providers
+  async createToken(username: string) {
+    this.logger.log('create Token');
+    const user: JwtPayload = { username };
+    const keyid = crypto
+      .createHash('sha256')
+      .update(this.RSA_PUBLIC_KEY)
+      .digest('hex');
 
-        const token = jwt.sign({}, this.RSA_PRIVATE_KEY, {
-            algorithm: 'RS256',
-            expiresIn: this.expiresIn,
-            subject: username,
-            keyid,
-        });
-        return {
-            expiresIn: this.expiresIn,
-            token,
-        };
+    const token = jwt.sign({}, this.RSA_PRIVATE_KEY, {
+      algorithm: 'RS256',
+      expiresIn: this.expiresIn,
+      subject: username,
+      keyid,
+    });
+    return {
+      expiresIn: this.expiresIn,
+      token,
+    };
+  }
+
+  async validateUser(signedUser): Promise<boolean> {
+    this.logger.log('validate user:');
+    this.logger.log(signedUser);
+    if (signedUser && signedUser.sub) {
+      return Boolean(this.userService.getUserByUsername(signedUser.sub));
     }
+    return false;
+  }
 
-    async validateUser(signedUser): Promise<boolean> {
-        this.logger.log('validate user:');
-        this.logger.log(signedUser);
-        if (signedUser && signedUser.sub) {
-            return Boolean(this.userService.getUserByUsername(signedUser.sub));
-        }
-        return false;
+  async validateUser2(username: string, pass: string): Promise<any> {
+    // const user = await this.usersService.findOne(username);
+    const user = await this.userService.getUserByUsername(username);
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
     }
+    return null;
+  }
 }
