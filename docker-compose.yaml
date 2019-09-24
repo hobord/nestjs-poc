@@ -9,28 +9,40 @@ services:
       MONGO_INITDB_DATABASE: "nestjs"
     volumes:
       - "data-volume:/data/db"
+      - "./deployment/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro"
     ports:
       - "27017:27017"
+    healthcheck:
+      test: ["CMD","until echo 'db.stats().ok' | mongo mongodb://root:supersecret@mongo:27017/admin --quiet ; do sleep 1; done"]
+      interval: 30s
+      timeout: 1s
+      retries: 5
     # logging:
-    # driver: none
-  # install:
-  #   image: node
-  #   command: "yarn"
-  #   working_dir: /app/
-  #   volumes:
-  #     - ./:/app
-  #     - "node-modules:/app/node_modules"
+    #   driver: none
+  mongoclient:
+    container_name: mongoclient
+    image: mongoclient/mongoclient
+    environment:
+      MONGO_USERNAME: "root"
+      MONGO_PASSWORD: "supersecret"
+      MONGO_ADDRESSES: "mongo"
+      MONGO_DATABASE: "admin"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    logging:
+      driver: none
   nest-app:
     image: node
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    command: "npm run start:dev"
-    # command: "node dist/main.js"
+    command: "sh develop-entry.sh"
     working_dir: /app/
     # install:
     environment:
-      PORT: "3000"
+      PORT: "8080"
       # TYPEORM_TYPE: "mongodb"
       # TYPEORM_CONNECTION: "mongodb"
       # TYPEORM_HOST: "mongo"
@@ -46,7 +58,7 @@ services:
       - ./:/app
       - "node-modules:/app/node_modules"
     ports:
-      - "3000:3000"
+      - "8080:8080"
     depends_on:
       - mongo
 volumes:

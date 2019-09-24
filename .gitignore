@@ -32,3 +32,13 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Keys, Passwords etc
+.env
+keys
+ormconfig.json
+
+#locks
+package-lock.json
+yarn.lock
+

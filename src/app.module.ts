@@ -11,14 +11,26 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsModule } from './cats/cats.module';
 import { UserService } from './user/user.service';
+import { join } from 'path';
+import { GraphqlConfigService } from './graphql-config.service';
+import { ExampleModule } from './example/example.module';
+// import { ScalarsModule } from './common/scalars/scalars.module';
+// import { DateScalar } from './common/scalars/date.scalar';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
-    AuthModule,
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      host: 'mongo',
+      username: 'dbuser',
+      password: 'secret',
+      database: 'nestjs',
+      entities: [join(__dirname, '**/**.entity{.ts,.js}')],
+      synchronize: true,
+    }),
     UserModule,
+    AuthModule,
     JwksRsaModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
@@ -27,16 +39,12 @@ import { UserService } from './user/user.service';
       },
     }),
     GraphQLModule.forRoot({
-      // include: [CatsModule],
-      // debug: false,
-      // playground: false,
-      // typePaths: ['./**/*.graphql'],
       autoSchemaFile: 'schema.gql',
-      installSubscriptionHandlers: true,
       context: ({ req }) => ({ req }),
     }),
+    ExampleModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ObjectidScalar, Logger, JwtStrategy],
+  providers: [AppService, Logger, JwtStrategy], // ScalarsModule
 })
 export class AppModule {}
