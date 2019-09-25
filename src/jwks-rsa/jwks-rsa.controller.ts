@@ -8,8 +8,7 @@ import * as crypto from 'crypto';
 export class JwksRsaController {
     private logger = new Logger(JwksRsaController.name);
 
-    constructor() {
-    }
+    constructor() {}
 
     @Get('jwks.json')
     async jwks(@Response() res: any, @Body() body) {

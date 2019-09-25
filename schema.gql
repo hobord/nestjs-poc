@@ -18,13 +18,33 @@ input ExampleInput {
 }
 
 type Mutation {
+  createUser(input: UserInput!): User!
+  updateUser(input: UserInput!, id: String!): User!
+  deleteUser(id: String!): User!
   createExample(input: ExampleInput!): Example!
   updateExample(input: ExampleInput!, id: String!): Example!
   deleteExample(id: String!): Example!
 }
 
 type Query {
+  userHello: String!
+  whoAmI: User!
+  users: [User!]!
+  user(id: String!): User!
   exampleHello: String!
   examples: [Example!]!
   example(id: String!): Example!
+}
+
+type User {
+  id: ID!
+  email: String!
+  creationDate: Date
+  updateDate: Date
+}
+
+input UserInput {
+  email: String!
+  password: String!
+  passwordHash: String
 }
