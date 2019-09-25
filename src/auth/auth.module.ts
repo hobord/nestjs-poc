@@ -19,6 +19,7 @@ import { AuthResolver } from './auth.resolver';
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, AuthResolver],
+  providers: [AuthService, JwtStrategy, LocalStrategy, AuthResolver],
+  exports: [AuthService],
 })
 export class AuthModule {}
