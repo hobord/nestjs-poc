@@ -13,7 +13,8 @@ export class AuthResolver {
     @Args('username') username: string,
     @Args('password') password: string,
   ) {
-    return this.authService.login({username,  password});
+    const user = await this.authService.validateUser(username,  password);
+    return this.authService.login(user);
   }
 
 }

@@ -15,12 +15,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('JwtStrategy - validate - HI');
     const user = await this.authService.validateUser(payload.username, payload.password);
     if (!user) {
       throw new UnauthorizedException();
     }
     return user;
-    return { userId: payload.sub, username: payload.username };
+    // return { userId: payload.sub, username: payload.username };
   }
 }
