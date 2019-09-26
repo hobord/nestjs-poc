@@ -1,5 +1,5 @@
-import { ObjectType, Field, ID } from 'type-graphql';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { ObjectType, Field } from 'type-graphql';
+import { IsString } from 'class-validator';
 
 @ObjectType()
 export class AuthResult {
@@ -7,5 +7,4 @@ export class AuthResult {
   @IsString()
   // tslint:disable-next-line:variable-name
   readonly access_token: string;
-
 }
