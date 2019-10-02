@@ -28,11 +28,15 @@ export class UserResolver {
   }
 
   @Query(() => [User])
+  @Roles('authenticated')
+  @UseGuards(GqlAuthGuard, RolesGuard)
   async users() {
     return this.userService.findAll();
   }
 
   @Query(() => User)
+  @Roles('authenticated')
+  @UseGuards(GqlAuthGuard, RolesGuard)
   async user(@Args('id') id: string) {
     return this.userService.findOne(id);
   }
@@ -45,17 +49,39 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
+  @Roles('root')
+  @UseGuards(GqlAuthGuard, RolesGuard)
   async createUser(@Args('input') input: UserInput) {
     return this.userService.create(input);
   }
 
   @Mutation(() => User)
+  @Roles('root')
+  @UseGuards(GqlAuthGuard, RolesGuard)
   async updateUser(@Args('id') id: string, @Args('input') input: UserInput) {
     return this.userService.update(id, input);
   }
 
   @Mutation(() => User)
+  @Roles('root')
+  @UseGuards(GqlAuthGuard, RolesGuard)
   async deleteUser(@Args('id') id: string) {
     return this.userService.delete(id);
+  }
+
+  @Mutation(() => User)
+  @Roles('root')
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  async addRoleToUser(@Args('roleName') roleName: string, @Args('user') userInput: UserInput) {
+    const user = await this.userService.findOne(userInput.email);
+    return this.userService.addUserRole(user, roleName);
+  }
+
+  @Mutation(() => User)
+  @Roles('root')
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  async removeRoleFromUser(@Args('roleName') roleName: string, @Args('user') userInput: UserInput) {
+    const user = await this.userService.findOne(userInput.email);
+    return this.userService.removeUserRole(user, roleName);
   }
 }

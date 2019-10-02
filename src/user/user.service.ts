@@ -69,4 +69,13 @@ export class UserService {
         return roleNames;
     }
 
+    async addUserRole(user: IUser, roleName: string): Promise<IUser> {
+        await this.roleRepository.addRoleToUser(roleName, user);
+        return user;
+    }
+
+    async removeUserRole(user: IUser, roleName: string): Promise<IUser> {
+        await this.roleRepository.removeRoleFromUser(roleName, user);
+        return user;
+    }
 }
