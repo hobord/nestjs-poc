@@ -1,5 +1,6 @@
 import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 import { IUser } from '../interfaces/user.interface';
+import { UserService } from '../user.service';
 
 @Entity({name: 'user'})
 export class UserModel implements IUser {
@@ -17,6 +18,4 @@ export class UserModel implements IUser {
 
   @Column()
   readonly updateDate: Date;
-
-  roles = ['authenticated'];
 }

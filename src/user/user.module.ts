@@ -6,13 +6,15 @@ import { UserModelFactory } from './model/user-model.factory';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModel } from './model/user.entity';
 import { ScalarsModule } from '../common/scalars/scalars.module';
+import { UserRoleRepository } from './model/user-role.repository';
+import { UserRoleModel } from './model/user-role.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserModel]),
+    TypeOrmModule.forFeature([UserModel, UserRoleModel]),
     ScalarsModule,
   ],
-  providers: [UserModelFactory, UserRepository, UserResolver, UserService],
+  providers: [UserModelFactory, UserRepository, UserResolver, UserService, UserRoleRepository],
   exports: [UserService],
 })
 export class UserModule {}

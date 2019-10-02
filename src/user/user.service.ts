@@ -4,6 +4,7 @@ import { UserInput } from './dto/input-user.input';
 import { UserRepository } from './model/user.repository';
 import { IUserRepository } from './interfaces/user-repository.interface';
 import * as argon2 from 'argon2';
+import { UserRoleRepository } from './model/user-role.repository';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,7 @@ export class UserService {
 
     constructor(
         @Inject(UserRepository) private readonly repository: IUserRepository,
+        @Inject(UserRoleRepository) private readonly roleRepository: UserRoleRepository,
     ) {}
 
     async create(createUserDto: UserInput): Promise<IUser> {
@@ -58,6 +60,13 @@ export class UserService {
             this.logger.log('argon2 error');
             return false;
         }
+    }
+
+    async getUserRoleNames(user: IUser): Promise<string[]> {
+        const roles = await this.roleRepository.getByUser(user);
+        const roleNames = roles.map((role) => role.roleName);
+        roleNames.push('authenticated');
+        return roleNames;
     }
 
 }

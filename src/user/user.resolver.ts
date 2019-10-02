@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveProperty } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './dto/user.dto';
 import { UserInput } from './dto/input-user.input';
@@ -7,8 +7,9 @@ import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { CurrentUser } from './user.decorator';
 import { RolesGuard } from '../auth/graphql-roles.guard';
 import { Roles } from '../auth/roles.decoraqtor';
+import { idText } from 'typescript';
 
-@Resolver()
+@Resolver(of => User)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
@@ -34,6 +35,13 @@ export class UserResolver {
   @Query(() => User)
   async user(@Args('id') id: string) {
     return this.userService.findOne(id);
+  }
+
+  @ResolveProperty(() => Roles)
+  @Roles('authenticated')
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  async roles(@CurrentUser() user: User): Promise<string[]> {
+    return await this.userService.getUserRoleNames(user);
   }
 
   @Mutation(() => User)
