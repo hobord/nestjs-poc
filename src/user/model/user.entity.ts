@@ -17,4 +17,6 @@ export class UserModel implements IUser {
 
   @Column()
   readonly updateDate: Date;
+
+  roles = ['authenticated'];
 }

@@ -12,6 +12,9 @@ export class User {
   @IsNotEmpty()
   readonly email?: string;
 
+  @Field(type => [String], { nullable: true })
+  readonly roles?: string[];
+
   @Field({ nullable: true })
   readonly creationDate?: Date;
 

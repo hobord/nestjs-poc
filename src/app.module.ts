@@ -28,7 +28,7 @@ import { AuthModule } from './auth/auth.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
-      context: ({ req }) => ({ req }),
+      context: ({ req }) => ({ req, user: req.user }),
     }),
     ExampleModule,
     AuthModule,
