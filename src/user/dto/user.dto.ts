@@ -12,6 +12,11 @@ export class User {
   @IsNotEmpty()
   readonly email?: string;
 
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  readonly name?: string;
+
   @Field(type => [String], { nullable: true })
   readonly roles?: string[];
 

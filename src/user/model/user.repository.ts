@@ -6,15 +6,15 @@ import { IUser } from '../interfaces/user.interface';
 import { UserInput } from '../dto/input-user.input';
 import { UserModel } from './user.entity';
 import { UserModelFactory } from './user-model.factory';
+import { IPaginate } from '../../common/pagination/paginate.interface';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(
-      @InjectRepository(UserModel)
-      private readonly repository: Repository<UserModel>,
-      private readonly modelFactory: UserModelFactory,
-      ) {
-  }
+    @InjectRepository(UserModel)
+    private readonly repository: Repository<UserModel>,
+    private readonly modelFactory: UserModelFactory,
+  ) {}
   async create(createUserDto: UserInput): Promise<IUser> {
     const model = this.modelFactory.create(createUserDto);
     return this.repository.save(model);
@@ -34,12 +34,27 @@ export class UserRepository implements IUserRepository {
     return model;
   }
 
-  async findAll(): Promise<IUser[]> {
-    const models = await this.repository.find();
+  async findAll(paginate?: IPaginate): Promise<IUser[]> {
+    const pager = {
+      take: paginate.limit || 30,
+      skip: paginate.offset || 0,
+    };
+
+    const order = {
+      order: { name: 'ASC' },
+    };
+
+    const models = await this.repository.find({
+      where: {
+        ...order,
+      },
+      ...pager,
+    });
+
     return models;
   }
   async delete(id: string): Promise<IUser> {
-    const model =  await this.repository.findOne(id);
+    const model = await this.repository.findOne(id);
     this.repository.delete(model);
     return model;
   }
@@ -48,7 +63,7 @@ export class UserRepository implements IUserRepository {
       ...data,
       updateDate: new Date(),
     };
-    let model =  await this.repository.findOne(id);
+    let model = await this.repository.findOne(id);
     model = Object.assign(model, updateData);
     return this.repository.save(model);
   }

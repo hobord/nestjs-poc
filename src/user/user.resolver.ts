@@ -13,6 +13,7 @@ import { CurrentUser } from './user.decorator';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { RolesGuard } from '../auth/graphql-roles.guard';
 import { Roles } from '../auth/roles.decoraqtor';
+import { PaginateInput } from '../common/pagination/paginate.input';
 
 @Resolver(of => User)
 export class UserResolver {
@@ -33,8 +34,8 @@ export class UserResolver {
   @Query(() => [User])
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, RolesGuard)
-  async users() {
-    return this.userService.findAll();
+  async users(@Args('paginate') paginate?: PaginateInput) {
+    return this.userService.findAll(paginate);
   }
 
   @Query(() => User)
