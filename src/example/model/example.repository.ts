@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IExampleRepository } from '../interfaces/exaqmple-repository.interface';
+import { IExampleRepository } from '../interfaces/example-repository.interface';
 import { IExample } from '../interfaces/example.interface';
 import { ExampleInput } from '../dto/input-example.input';
 import { ExampleModel } from './example.entity';
@@ -10,11 +10,10 @@ import { ExampleModelFactory } from './example-model.factory';
 @Injectable()
 export class ExampleRepository implements IExampleRepository {
   constructor(
-      @InjectRepository(ExampleModel)
-      private readonly repository: Repository<ExampleModel>,
-      private readonly modelFactory: ExampleModelFactory,
-      ) {
-  }
+    @InjectRepository(ExampleModel)
+    private readonly repository: Repository<ExampleModel>,
+    private readonly modelFactory: ExampleModelFactory,
+  ) {}
   async create(createExampleDto: ExampleInput): Promise<IExample> {
     const model = this.modelFactory.create(createExampleDto);
     return this.repository.save(model);
@@ -29,7 +28,7 @@ export class ExampleRepository implements IExampleRepository {
     return models;
   }
   async delete(id: string): Promise<IExample> {
-    const model =  await this.repository.findOne(id);
+    const model = await this.repository.findOne(id);
     this.repository.delete(model);
     return model;
   }
@@ -38,7 +37,7 @@ export class ExampleRepository implements IExampleRepository {
       ...example,
       updateDate: new Date(),
     };
-    let model =  await this.repository.findOne(id);
+    let model = await this.repository.findOne(id);
     model = Object.assign(model, updateData);
     return this.repository.save(model);
   }

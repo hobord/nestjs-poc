@@ -1,19 +1,22 @@
-import { Resolver, Query, Mutation, Args, ResolveProperty } from '@nestjs/graphql';
-import { UserService } from './user.service';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveProperty,
+} from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 import { User } from './dto/user.dto';
 import { UserInput } from './dto/input-user.input';
-import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/graphql-auth.guard';
+import { UserService } from './user.service';
 import { CurrentUser } from './user.decorator';
+import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { RolesGuard } from '../auth/graphql-roles.guard';
 import { Roles } from '../auth/roles.decoraqtor';
-import { idText } from 'typescript';
 
 @Resolver(of => User)
 export class UserResolver {
-  constructor(
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => String)
   async userHello() {
@@ -72,7 +75,10 @@ export class UserResolver {
   @Mutation(() => User)
   @Roles('root')
   @UseGuards(GqlAuthGuard, RolesGuard)
-  async addRoleToUser(@Args('roleName') roleName: string, @Args('user') userInput: UserInput) {
+  async addRoleToUser(
+    @Args('roleName') roleName: string,
+    @Args('user') userInput: UserInput,
+  ) {
     const user = await this.userService.findOne(userInput.email);
     return this.userService.addUserRole(user, roleName);
   }
@@ -80,7 +86,10 @@ export class UserResolver {
   @Mutation(() => User)
   @Roles('root')
   @UseGuards(GqlAuthGuard, RolesGuard)
-  async removeRoleFromUser(@Args('roleName') roleName: string, @Args('user') userInput: UserInput) {
+  async removeRoleFromUser(
+    @Args('roleName') roleName: string,
+    @Args('user') userInput: UserInput,
+  ) {
     const user = await this.userService.findOne(userInput.email);
     return this.userService.removeUserRole(user, roleName);
   }
