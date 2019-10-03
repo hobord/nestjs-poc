@@ -14,28 +14,28 @@ export class ExampleResolver {
     return 'hello';
   }
 
-  @Query(() => [Example])
-  async examples() {
+  @Query(() => [Example], {nullable: true})
+  async examples(): Promise<Example[]> {
     return this.exampleService.findAll();
   }
 
-  @Query(() => Example)
-  async example(@Args('id') id: string) {
+  @Query(() => Example, {nullable: true})
+  async example(@Args('id') id: string): Promise<Example> {
     return this.exampleService.findOne(id);
   }
 
   @Mutation(() => Example)
-  async createExample(@Args('input') input: ExampleInput) {
+  async createExample(@Args('input') input: ExampleInput): Promise<Example> {
     return this.exampleService.create(input);
   }
 
   @Mutation(() => Example)
-  async updateExample(@Args('id') id: string, @Args('input') input: ExampleInput) {
+  async updateExample(@Args('id') id: string, @Args('input') input: ExampleInput): Promise<Example> {
     return this.exampleService.update(id, input);
   }
 
   @Mutation(() => Example)
-  async deleteExample(@Args('id') id: string) {
+  async deleteExample(@Args('id') id: string): Promise<Example> {
     return this.exampleService.delete(id);
   }
 }
