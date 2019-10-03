@@ -15,10 +15,15 @@ import { RoleService } from './role.service';
   controllers: [AuthController],
   imports: [
     UserModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+      session: true,
+    }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: {
+        expiresIn: 3600, // 1hr
+      },
     }),
   ],
   providers: [AuthService, RoleService, JwtStrategy, LocalStrategy, AuthResolver],
