@@ -1,4 +1,6 @@
 # yarn add mongoose
+npm set strict-ssl false = false
 yarn
 # node createKeyPair.js
 npm run start:dev
+# npm run start:seed
