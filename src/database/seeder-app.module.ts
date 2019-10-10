@@ -1,14 +1,10 @@
-import { Module, Logger } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { DatabaseProviderModule } from './database-provider.module';
 import { Seeder } from './seeders/seeder';
 import { UserModule } from '../user/user.module';
 import { WinstonConfig } from '../config/winston-config';
 import { WinstonModule } from 'nest-winston';
-import { UserService } from '../user/user.service';
-import { RoleService } from '../auth/role.service';
-import { UserRoleRepository } from '../user/model/user-role.repository';
 import { UserSeederService } from './seeders/user-seeder.service';
-import { UserSeederModule } from './seeders/user-seeder.module';
 
 /**
  * Import and provide seeder classes.
@@ -36,12 +32,10 @@ export class SeederModule {
 @Module({
   imports: [
     WinstonModule.forRoot(WinstonConfig),
-    // TypeOrmModule.forRoot(TypeOrmConfig),
     DatabaseProviderModule,
     UserModule,
-    UserSeederModule,
   ],
   providers: [UserSeederService, Seeder],
   controllers: [],
 })
-export class SeederModule {}
+export class SeederAppModule {}
