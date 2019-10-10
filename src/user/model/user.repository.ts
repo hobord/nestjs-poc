@@ -17,7 +17,7 @@ export class UserRepository implements IUserRepository {
   ) {}
   async create(createUserDto: UserInput): Promise<IUser> {
     const model = this.modelFactory.create(createUserDto);
-    return this.repository.save(model);
+    return await this.repository.save(model);
   }
 
   async findOne(id: string): Promise<IUser> {
