@@ -31,6 +31,7 @@ export class UserSeederService {
         } as UserInput;
 
         const createdUser = await this.userService.create(userInput);
+        console.log(createdUser)
         if (user.roles && user.roles.length > 0 ) {
           user.roles.map(async role => {
             await this.userService.addUserRole(createdUser, role);

@@ -7,7 +7,9 @@ export class UserModelFactory {
   create(data ?: Partial < IUser>): IUser {
     const now =  new Date();
     const createData = {
-      ...data,
+      name: data.name,
+      email: data.email,
+      passwordHash: data.passwordHash,
       creationDate: now,
       updateDate: now,
     };

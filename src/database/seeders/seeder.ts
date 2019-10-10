@@ -7,17 +7,17 @@ import { IUser } from 'src/user/interfaces/user.interface';
 @Injectable()
 export class Seeder {
   constructor(
-    private readonly logger: Logger,
+    // private readonly logger: Logger,
     private readonly userSeederSerice: UserSeederService,
   ) {}
   async seed() {
     await this.users(usersSeedData)
       .then(completed => {
-        this.logger.log('info', 'Successfuly completed seeding users...');
+        // this.logger.log('info', 'Successfuly completed seeding users...');
         Promise.resolve(completed);
       })
       .catch(error => {
-        this.logger.error('Failed seeding users...');
+        // this.logger.error('Failed seeding users...');
         Promise.reject(error);
       });
   }
@@ -25,7 +25,8 @@ export class Seeder {
     return await Promise.all(this.userSeederSerice.create(users))
       .then(createdUsers => {
         // Can also use this.logger.verbose('...');
-        this.logger.debug(
+        // this.logger.debug(
+        console.log(
           'No. of Users created : ' +
             // Remove all null values and return only created users.
             createdUsers.filter(
