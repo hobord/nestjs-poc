@@ -3,7 +3,7 @@ import { IUserRole } from '../interfaces/user-role.interface';
 
 @Entity({ name: 'user_roles' })
 export class UserRoleModel implements IUserRole {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column()

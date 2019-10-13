@@ -4,7 +4,7 @@ import { UserService } from '../user.service';
 
 @Entity({ name: 'user' })
 export class UserModel implements IUser {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column({ unique: true })

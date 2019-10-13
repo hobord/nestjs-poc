@@ -3,7 +3,7 @@ import { IExample } from '../interfaces/example.interface';
 
 @Entity({ name: 'example' })
 export class ExampleModel implements IExample {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column()

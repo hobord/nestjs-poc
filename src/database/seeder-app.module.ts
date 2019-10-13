@@ -5,6 +5,8 @@ import { UserModule } from '../user/user.module';
 import { WinstonConfig } from '../config/winston-config';
 import { WinstonModule } from 'nest-winston';
 import { UserSeederService } from './seeders/users/user-seeder.service';
+import { Connection } from 'typeorm';
+import { Migration } from './migration.module';
 
 /**
  * Import and provide seeder classes.
@@ -17,7 +19,7 @@ import { UserSeederService } from './seeders/users/user-seeder.service';
     DatabaseProviderModule,
     UserModule,
   ],
-  providers: [UserSeederService, Seeder],
+  providers: [UserSeederService, Seeder, Migration],
   controllers: [],
 })
 export class SeederAppModule {}

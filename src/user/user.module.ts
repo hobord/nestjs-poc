@@ -19,6 +19,7 @@ import { RoleService } from '../auth/role.service';
     UserRoleRepository,
     UserResolver,
     UserService,
+    RoleService,
   ],
   exports: [UserService],
 })
