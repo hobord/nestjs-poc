@@ -53,28 +53,35 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  @Roles('root')
+  @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, RolesGuard)
   async createUser(@Args('input') input: UserInput) {
     return this.userService.create(input);
   }
 
   @Mutation(() => User)
-  @Roles('root')
+  @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, RolesGuard)
   async updateUser(@Args('id') id: string, @Args('input') input: UserInput) {
     return this.userService.update(id, input);
   }
 
   @Mutation(() => User)
-  @Roles('root')
+  @Roles('authenticated')
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  async updateMe(@CurrentUser() user: User, @Args('input') input: UserInput) {
+    return this.userService.update(user.id, input);
+  }
+
+  @Mutation(() => User)
+  @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, RolesGuard)
   async deleteUser(@Args('id') id: string) {
     return this.userService.delete(id);
   }
 
   @Mutation(() => User)
-  @Roles('root')
+  @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, RolesGuard)
   async addRoleToUser(
     @Args('roleName') roleName: string,
@@ -85,7 +92,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  @Roles('root')
+  @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, RolesGuard)
   async removeRoleFromUser(
     @Args('roleName') roleName: string,

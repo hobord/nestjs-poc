@@ -3,6 +3,10 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AuthResult {
+  access_token: String!
+}
+
 """Date custom scalar type"""
 scalar Date
 
@@ -20,31 +24,50 @@ input ExampleInput {
 type Mutation {
   createUser(input: UserInput!): User!
   updateUser(input: UserInput!, id: String!): User!
+  updateMe(input: UserInput!): User!
   deleteUser(id: String!): User!
+  addRoleToUser(user: UserInput!, roleName: String!): User!
+  removeRoleFromUser(user: UserInput!, roleName: String!): User!
   createExample(input: ExampleInput!): Example!
   updateExample(input: ExampleInput!, id: String!): Example!
   deleteExample(id: String!): Example!
 }
 
+input PaginateInput {
+  limit: Float!
+  offset: Float
+}
+
 type Query {
   userHello: String!
   whoAmI: User!
-  users: [User!]!
+  users(paginate: PaginateInput!): [User!]!
   user(id: String!): User!
   exampleHello: String!
-  examples: [Example!]!
-  example(id: String!): Example!
+  examples: [Example!]
+  example(id: String!): Example
+  login(password: String!, username: String!): AuthResult!
+  authRoles: [Role!]!
+}
+
+type Role {
+  name: String!
+  description: String!
 }
 
 type User {
   id: ID!
   email: String!
+  name: String!
+  roles: [String!]
   creationDate: Date
   updateDate: Date
 }
 
 input UserInput {
   email: String!
-  password: String!
+  name: String
+  password: String
   passwordHash: String
+  roles: [String!]
 }

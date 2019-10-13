@@ -1,19 +1,20 @@
 import { Logger } from 'winston';
 import { Injectable, Inject } from '@nestjs/common';
-import { UserSeederService } from './user-seeder.service';
-import { users as usersSeedData } from './data';
+import { UserSeederService } from './users/user-seeder.service';
+import { users as usersSeedData } from './users/data';
 import { IUser } from '../../user/interfaces/user.interface';
 
 @Injectable()
 export class Seeder {
   constructor(
     @Inject('winston') private readonly logger: Logger,
-    private readonly userSeederSerice: UserSeederService,
+    private readonly userSeederService: UserSeederService,
   ) {}
+
   async seed() {
     await this.users(usersSeedData)
       .then(completed => {
-        this.logger.log('info', 'Successfuly completed seeding users...');
+        this.logger.log('info', 'Successfully completed seeding users...');
         Promise.resolve(completed);
       })
       .catch(error => {
@@ -21,10 +22,10 @@ export class Seeder {
         Promise.reject(error);
       });
   }
+
   async users(users: IUser[]) {
-    return await Promise.all(this.userSeederSerice.create(users))
+    return await Promise.all(this.userSeederService.create(users))
       .then(createdUsers => {
-        // Can also use this.logger.verbose('...');
         this.logger.log(
           'info',
           'No. of Users created : ' +

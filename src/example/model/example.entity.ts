@@ -1,4 +1,4 @@
-import { Column, Entity, ObjectID, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IExample } from '../interfaces/example.interface';
 
 @Entity({ name: 'example' })

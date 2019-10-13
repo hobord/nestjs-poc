@@ -8,14 +8,25 @@ import { UserModel } from './model/user.entity';
 import { ScalarsModule } from '../common/scalars/scalars.module';
 import { UserRoleRepository } from './model/user-role.repository';
 import { UserRoleModel } from './model/user-role.entity';
+import { RoleService } from '../auth/role.service';
 
 @Global()
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserModel, UserRoleModel]),
-    ScalarsModule, // TODO: remove ???
+  imports: [TypeOrmModule.forFeature([UserModel, UserRoleModel])],
+  providers: [
+    UserModelFactory,
+    UserRepository,
+    UserRoleRepository,
+    UserResolver,
+    UserService,
   ],
-  providers: [UserModelFactory, UserRepository, UserRoleRepository, UserResolver, UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule {
+  constructor(private roleSerice: RoleService) {
+    this.roleSerice.addRole({
+      name: 'usermanager',
+      description: 'User manager Role',
+    });
+  }
+}

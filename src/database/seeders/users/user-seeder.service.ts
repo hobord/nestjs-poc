@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserModel } from '../../user/model/user.entity';
-import { IUser } from '../../user/interfaces/user.interface';
-import { User } from '../../user/dto/user.dto';
-import { UserService } from '../../user/user.service';
-import { UserInput } from '../../user/dto/input-user.input';
+import { IUser } from '../../../user/interfaces/user.interface';
+import { User } from '../../../user/dto/user.dto';
+import { UserService } from '../../../user/user.service';
+import { UserInput } from '../../../user/dto/input-user.input';
 
 @Injectable()
 export class UserSeederService {
@@ -26,7 +24,6 @@ export class UserSeederService {
 
           const userInput: UserInput = {
             ...user,
-            password: 'password', // TODO: create random
           } as UserInput;
 
           const createdUser = await this.userService.create(userInput);

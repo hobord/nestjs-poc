@@ -1,13 +1,8 @@
 import { SeederAppModule } from './seeder-app.module';
 import { NestFactory } from '@nestjs/core';
 import { Seeder } from './seeders/seeder';
-console.log('app');
 
 async function bootstrap() {
-  // , {
-  //   logger: false,
-  // }
-
   NestFactory.createApplicationContext(SeederAppModule)
     .then(appContext => {
       const logger = appContext.get('NestWinston');
@@ -28,28 +23,6 @@ async function bootstrap() {
     .catch(error => {
       throw error;
     });
-
-  /*
-  const app = await NestFactory.create(SeederModule, {
-    logger: false,
-  });
-  console.log('hi2');
-  const logger = app.get('NestWinston');
-  app.useLogger(logger);
-  app.init();
-
-  const seeder = app.get(Seeder);
-  seeder
-    .seed()
-    .then(() => {
-      logger.log('info', 'Seeding complete!');
-    })
-  .catch(error => {
-    logger.log('error', 'Seeding failed!');
-    throw error;
-  })
-  .finally(() => app.close());
-*/
 }
 
 bootstrap();
