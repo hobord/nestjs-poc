@@ -9,9 +9,7 @@ async function bootstrap() {
       const logger = appContext.get('NestWinston');
       appContext.useLogger(logger);
 
-      const migration = appContext.get(Migration);
-      await migration.runMigrations();
-
+      logger.log('info', 'Seeder starting');
       const seeder = appContext.get(Seeder);
       seeder
         .seed()
@@ -22,7 +20,10 @@ async function bootstrap() {
           logger.error('Seeding failed!');
           throw error;
         })
-        .finally(() => appContext.close());
+        .finally(async () => {
+          await appContext.close();
+          process.exit();
+        });
     })
     .catch(error => {
       throw error;

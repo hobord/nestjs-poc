@@ -19,5 +19,6 @@ export class Migration {
       this.logger.log('error', error, error);
     }
     this.logger.log('info', 'Migrations end');
+    this.connection.close();
   }
 }
