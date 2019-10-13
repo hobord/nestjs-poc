@@ -21,11 +21,11 @@ export class InitUsers1570696694274 implements MigrationInterface {
         },
         {
           name: 'passwordHash',
-          type: 'datetime',
+          type: 'varchar',
         },
         {
           name: 'creationDate',
-          type: 'varchar',
+          type: 'datetime',
         },
         {
           name: 'updateDate',
