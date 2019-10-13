@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { UserRepository } from './model/user.repository';
@@ -9,12 +9,13 @@ import { ScalarsModule } from '../common/scalars/scalars.module';
 import { UserRoleRepository } from './model/user-role.repository';
 import { UserRoleModel } from './model/user-role.entity';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserModel, UserRoleModel]),
-    ScalarsModule,
+    ScalarsModule, // TODO: remove ???
   ],
-  providers: [UserModelFactory, UserRepository, UserResolver, UserService, UserRoleRepository],
+  providers: [UserModelFactory, UserRepository, UserRoleRepository, UserResolver, UserService],
   exports: [UserService],
 })
 export class UserModule {}

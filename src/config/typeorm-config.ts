@@ -15,5 +15,7 @@ export const TypeOrmConfig = {
   subscribers: [join(__dirname, '..', 'db', 'subscriber', '**/*.ts')],
   synchronize: toBool(getOsEnv('TYPEORM_SYNCHRONIZE', 'true')),
   logging: getOsEnv('TYPEORM_LOGGING', 'false'),
+  connectTimeout: 20000,
+  extra: { connectionLimit: 50 },
   // logging: 'all',
 } as TypeOrmModuleOptions;

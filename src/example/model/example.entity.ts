@@ -1,9 +1,9 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectID, PrimaryGeneratedColumn } from 'typeorm';
 import { IExample } from '../interfaces/example.interface';
 
-@Entity({name: 'example'})
+@Entity({ name: 'example' })
 export class ExampleModel implements IExample {
-  @ObjectIdColumn()
+  @PrimaryGeneratedColumn()
   id?: string;
 
   @Column()

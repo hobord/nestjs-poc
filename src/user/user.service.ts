@@ -22,7 +22,16 @@ export class UserService {
 
     // clear  password as we don't persist passwords
     createUserDto.password = undefined;
-    return await this.repository.create(createUserDto);
+
+    const user = await this.repository.create(createUserDto);
+
+    if (createUserDto.roles && createUserDto.roles.length > 0) {
+      for (const role of createUserDto.roles) {
+        await this.addUserRole(user, role);
+      }
+    }
+
+    return user;
   }
 
   async findAll(paginate?: IPaginate): Promise<IUser[]> {

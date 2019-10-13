@@ -13,4 +13,7 @@ export class UserInput {
 
   @Field({ nullable: true })
   passwordHash?: string;
+
+  @Field(type => [String], { nullable: true })
+  roles?: string[];
 }

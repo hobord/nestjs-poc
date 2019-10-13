@@ -1,10 +1,10 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IUser } from '../interfaces/user.interface';
 import { UserService } from '../user.service';
 
 @Entity({ name: 'user' })
 export class UserModel implements IUser {
-  @ObjectIdColumn()
+  @PrimaryGeneratedColumn()
   id?: string;
 
   @Column({ unique: true })

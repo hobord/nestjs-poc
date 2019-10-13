@@ -4,10 +4,8 @@ import { UserService } from '../../user/user.service';
 import { UserModule } from '../../user/user.module';
 
 @Module({
-  imports: [
-    UserModule,
-  ],
-  providers: [UserService, UserSeederService],
+  imports: [UserModule],
+  providers: [UserSeederService],
   exports: [UserSeederService],
 })
 export class UserSeederModule {}

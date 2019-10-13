@@ -1,13 +1,13 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IUserRole } from '../interfaces/user-role.interface';
 
-@Entity({name: 'user_roles'})
+@Entity({ name: 'user_roles' })
 export class UserRoleModel implements IUserRole {
-  @ObjectIdColumn()
+  @PrimaryGeneratedColumn()
   id?: string;
 
-  @ObjectIdColumn()
-  userId?: string;
+  @Column()
+  userId: string;
 
   @Column()
   roleName: string;

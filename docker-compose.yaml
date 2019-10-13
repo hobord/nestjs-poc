@@ -1,38 +1,61 @@
 version: "3.6"
 
 services:
-  mongo:
-    image: mongo:latest
+  # mongo:
+  #   image: mongo:latest
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: "root"
+  #     MONGO_INITDB_ROOT_PASSWORD: "supersecret"
+  #     MONGO_INITDB_DATABASE: "nestjs"
+  #   volumes:
+  #     - "data-volume:/data/db"
+  #     - "./deployment/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro"
+  #   ports:
+  #     - "27017:27017"
+  #   healthcheck:
+  #     test:
+  #       [
+  #         "CMD",
+  #         "until echo 'db.stats().ok' | mongo mongodb://root:supersecret@mongo:27017/admin --quiet ; do sleep 1; done",
+  #       ]
+  #     interval: 30s
+  #     timeout: 1s
+  #     retries: 5
+  #   # logging:
+  #   #   driver: none
+  # mongoclient:
+  #   container_name: mongoclient
+  #   image: mongoclient/mongoclient
+  #   environment:
+  #     MONGO_USERNAME: "root"
+  #     MONGO_PASSWORD: "supersecret"
+  #     MONGO_ADDRESSES: "mongo"
+  #     MONGO_DATABASE: "admin"
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - mongo
+  #   logging:
+  #     driver: none
+  mysql:
+    image: mysql:5.6
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "root"
-      MONGO_INITDB_ROOT_PASSWORD: "supersecret"
-      MONGO_INITDB_DATABASE: "nestjs"
-    volumes:
-      - "data-volume:/data/db"
-      - "./deployment/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro"
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: "nestjs"
+      MYSQL_USER: "dbuser"
+      MYSQL_PASSWORD: "secret"
     ports:
-      - "27017:27017"
-    healthcheck:
-      test: ["CMD","until echo 'db.stats().ok' | mongo mongodb://root:supersecret@mongo:27017/admin --quiet ; do sleep 1; done"]
-      interval: 30s
-      timeout: 1s
-      retries: 5
-    # logging:
-    #   driver: none
-  mongoclient:
-    container_name: mongoclient
-    image: mongoclient/mongoclient
+      - "3306:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
     environment:
-      MONGO_USERNAME: "root"
-      MONGO_PASSWORD: "supersecret"
-      MONGO_ADDRESSES: "mongo"
-      MONGO_DATABASE: "admin"
-    ports:
-      - "3000:3000"
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: supersecret
     depends_on:
-      - mongo
-    logging:
-      driver: none
+      - mysql
+    ports:
+      - "8081:80"
   nest-app:
     image: node
     # build:
@@ -46,15 +69,24 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
       LOG_LEVEL: "debug"
       GRAPHQL_DEBUG: "false"
-      TYPEORM_TYPE: "mongodb"
-      TYPEORM_HOST: "mongo"
+      # TYPEORM_TYPE: "mongodb"
+      # TYPEORM_HOST: "mongo"
+      # TYPEORM_USERNAME: "dbuser"
+      # TYPEORM_PASSWORD: "secret"
+      # TYPEORM_DATABASE: "nestjs"
+      # TYPEORM_PORT: "27017"
+      # TYPEORM_SSLVALIDATE: "false"
+      # TYPEORM_SYNCHRONIZE: "true"
+      # # TYPEORM_LOGGING: "true"
+      # TYPEORM_ENTITIES: "src/**/**.entity{.ts,.js}"
+      TYPEORM_HOST: "mysql"
+      TYPEORM_TYPE: "mysql"
       TYPEORM_USERNAME: "dbuser"
       TYPEORM_PASSWORD: "secret"
       TYPEORM_DATABASE: "nestjs"
-      TYPEORM_PORT: "27017"
+      TYPEORM_PORT: "3306"
       TYPEORM_SSLVALIDATE: "false"
       TYPEORM_SYNCHRONIZE: "true"
-      # TYPEORM_AUTHSOURCE: "admin"
       # TYPEORM_LOGGING: "true"
       TYPEORM_ENTITIES: "src/**/**.entity{.ts,.js}"
     volumes:
@@ -63,7 +95,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - mongo
+      - mysql
 volumes:
   data-volume:
   node-modules:
