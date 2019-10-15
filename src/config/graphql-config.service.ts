@@ -4,6 +4,9 @@ import { createComplexityLimitRule } from 'graphql-validation-complexity';
 // import depthLimit from 'graphql-depth-limit';
 import { toBool, getOsEnv, toNumber } from '../lib/env';
 import { Logger } from 'winston';
+import { DeprecatedDirective, RestDirective, FormattableDateDirective } from '../common/directives';
+// import { GraphQLSchema } from 'graphql';
+// import { mergeSchemas } from 'graphql-tools';
 
 let requestStartTime: Date;
 let requestEndTime: Date;
@@ -25,6 +28,11 @@ const complexityLimitRule = createComplexityLimitRule(toNumber(getOsEnv('GRAPHQL
   ),
 });
 
+const schemaDirectives = {
+  deprecated: DeprecatedDirective,
+  rest: RestDirective,
+};
+
 @Injectable()
 export class GraphqlConfigService implements GqlOptionsFactory {
   constructor(@Inject('winston') private readonly logger: Logger) { }
@@ -33,7 +41,19 @@ export class GraphqlConfigService implements GqlOptionsFactory {
     return {
       playground: true,
       autoSchemaFile: 'schema.gql',
-      // context: ({ req }) => ({ req, user: req.user }),
+      // directiveResolvers: [
+      //   DeprecatedDirective,
+      //   RestDirective,
+      //   FormattableDateDirective,
+      // ],
+      // schemaDirectives,
+      // transformSchema: async (schema: any) => {
+			// 	console.log(schema);
+			// 	return schema;
+			// },
+      // transformSchema: (schema: GraphQLSchema) => {
+      //   return mergeSchemas({ schemas: [schema], schemaDirectives });
+      // },
       context: ({res, req}) => {
         if (toBool(getOsEnv('GRAPHQL_DEBUG'))) {
           requestStartTime = new Date();
