@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class InitUsers1570696694274 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
@@ -59,6 +59,13 @@ export class InitUsers1570696694274 implements MigrationInterface {
       ],
     });
     await queryRunner.createTable(userRolesTable, true);
+
+    await queryRunner.createForeignKey('user_roles', new TableForeignKey({
+      columnNames: ['userId'],
+      referencedColumnNames: ['id'],
+      referencedTableName: 'user',
+      onDelete: 'CASCADE',
+    }));
 
     return null;
   }

@@ -52,3 +52,9 @@ content-type: application/json
         "usermanager"
     ]
 }
+
+// Delete user
+
+DELETE http://localhost:9090/users/dbfb2909-3bed-480e-ac0a-25344ff55597
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlZjExYmU0LWIwNGEtNGZiYS1iMmJhLWEwM2Y4NmRiZDZlNCIsIm5hbWUiOiJyb290IiwiZW1haWwiOiJyb290QGxvY2FsIiwiaWF0IjoxNTcxMTQ4MDcwLCJleHAiOjE1NzExNTE2NzB9.Dl0XE4Lm8BDI1qu4h8ltVaJl2vBUo1ijSMLWDEk5i0U
+
