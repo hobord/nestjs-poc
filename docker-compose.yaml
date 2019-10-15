@@ -94,6 +94,7 @@ services:
       - "node-modules:/app/node_modules"
     ports:
       - "9090:9090"
+      - "9229:9229"
     depends_on:
       - mysql
 volumes:

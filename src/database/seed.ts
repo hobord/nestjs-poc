@@ -1,15 +1,16 @@
 import { SeederAppModule } from './seeder-app.module';
 import { NestFactory } from '@nestjs/core';
 import { Seeder } from './seeders/seeder';
-import { Migration } from './migration.module';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   NestFactory.createApplicationContext(SeederAppModule)
     .then(async appContext => {
-      const logger = appContext.get('NestWinston');
+      const logger: Logger = appContext.get('NestWinston');
       appContext.useLogger(logger);
 
-      logger.log('info', 'Seeder starting');
+      logger.log('Seeder starting', 'SeederAppModule');
+
       const seeder = appContext.get(Seeder);
       seeder
         .seed()

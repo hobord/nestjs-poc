@@ -1,11 +1,29 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { GqlOptionsFactory, GqlModuleOptions } from '@nestjs/graphql';
-import { toBool, getOsEnv } from '../lib/env';
+import { createComplexityLimitRule } from 'graphql-validation-complexity';
+// import depthLimit from 'graphql-depth-limit';
+import { toBool, getOsEnv, toNumber } from '../lib/env';
 import { Logger } from 'winston';
 
 let requestStartTime: Date;
 let requestEndTime: Date;
 let requestCount = 0;
+
+// app inti was in blog 103340339
+const complexityLimitRule = createComplexityLimitRule(toNumber(getOsEnv('GRAPHQL_COMPLEXITYLIMIT', '200000000')), {
+  scalarCost: 1, // Default is 1
+  objectCost: 0, // Default is 0.
+  listFactor: 10, // Default is 10.
+  introspectionListFactor: 2, // Default is 2
+  onCost: (cost) => {
+    if (toBool(getOsEnv('GRAPHQL_DEBUG'))) {
+      this.logger.log('debug', 'query cost:' + cost);
+    }
+  },
+  formatErrorMessage: cost => (
+    `query with cost ${cost} exceeds complexity limit`
+  ),
+});
 
 @Injectable()
 export class GraphqlConfigService implements GqlOptionsFactory {
@@ -26,6 +44,10 @@ export class GraphqlConfigService implements GqlOptionsFactory {
         }
         return { req, user: req.user };
       },
+      validationRules: [
+        complexityLimitRule,
+        // depthLimit(toNumber(getOsEnv('GRAPHQL_DEPTHLIMIT', '10'))),
+      ],
       debug: toBool(getOsEnv('GRAPHQL_DEBUG')),
       tracing: toBool(getOsEnv('GRAPHQL_DEBUG')),
       formatResponse: (res, query) => {
