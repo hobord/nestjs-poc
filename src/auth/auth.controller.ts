@@ -12,9 +12,9 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('me')
-  getProfile(@Request() req) {
-    return req.user;
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('me')
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
 }

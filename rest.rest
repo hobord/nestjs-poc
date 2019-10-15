@@ -1,0 +1,54 @@
+// use https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+// CTRL+ALT+R
+
+
+// Login
+POST http://localhost:9090/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "username":"root@local", 
+    "password": "password"
+}
+
+
+// Get my user
+GET http://localhost:9090/users/me HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlZjExYmU0LWIwNGEtNGZiYS1iMmJhLWEwM2Y4NmRiZDZlNCIsIm5hbWUiOiJyb290IiwiZW1haWwiOiJyb290QGxvY2FsIiwiaWF0IjoxNTcxMTQ4MDcwLCJleHAiOjE1NzExNTE2NzB9.Dl0XE4Lm8BDI1qu4h8ltVaJl2vBUo1ijSMLWDEk5i0U
+
+// Get all user
+GET http://localhost:9090/users/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlZjExYmU0LWIwNGEtNGZiYS1iMmJhLWEwM2Y4NmRiZDZlNCIsIm5hbWUiOiJyb290IiwiZW1haWwiOiJyb290QGxvY2FsIiwiaWF0IjoxNTcxMTQ4MDcwLCJleHAiOjE1NzExNTE2NzB9.Dl0XE4Lm8BDI1qu4h8ltVaJl2vBUo1ijSMLWDEk5i0U
+
+GET http://localhost:9090/users/6ef11be4-b04a-4fba-b2ba-a03f86dbd6e4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlZjExYmU0LWIwNGEtNGZiYS1iMmJhLWEwM2Y4NmRiZDZlNCIsIm5hbWUiOiJyb290IiwiZW1haWwiOiJyb290QGxvY2FsIiwiaWF0IjoxNTcxMTQ4MDcwLCJleHAiOjE1NzExNTE2NzB9.Dl0XE4Lm8BDI1qu4h8ltVaJl2vBUo1ijSMLWDEk5i0U
+
+// Update user
+POST http://localhost:9090/users/6ef11be4-b04a-4fba-b2ba-a03f86dbd6e4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlZjExYmU0LWIwNGEtNGZiYS1iMmJhLWEwM2Y4NmRiZDZlNCIsIm5hbWUiOiJyb290IiwiZW1haWwiOiJyb290QGxvY2FsIiwiaWF0IjoxNTcxMTQ4MDcwLCJleHAiOjE1NzExNTE2NzB9.Dl0XE4Lm8BDI1qu4h8ltVaJl2vBUo1ijSMLWDEk5i0U
+content-type: application/json
+
+{
+    "email": "root@local",
+    "name": "root",
+    "createAt": "2019-10-15T10:12:02.000Z",
+    "updateAt": "2019-10-15T10:12:02.000Z",
+    "roles": [
+        "root",
+        "authenticated"
+    ]
+}
+
+// Create user
+POST http://localhost:9090/users/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlZjExYmU0LWIwNGEtNGZiYS1iMmJhLWEwM2Y4NmRiZDZlNCIsIm5hbWUiOiJyb290IiwiZW1haWwiOiJyb290QGxvY2FsIiwiaWF0IjoxNTcxMTQ4MDcwLCJleHAiOjE1NzExNTE2NzB9.Dl0XE4Lm8BDI1qu4h8ltVaJl2vBUo1ijSMLWDEk5i0U
+content-type: application/json
+
+{
+    "email": "manager@local",
+    "password": "secret",
+    "name": "manager",
+    "roles": [
+        "usermanager"
+    ]
+}

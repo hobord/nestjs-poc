@@ -36,8 +36,8 @@ export class UserRepository implements IUserRepository {
 
   async findAll(paginate?: IPaginate): Promise<IUser[]> {
     const pager = {
-      take: paginate.limit || 30,
-      skip: paginate.offset || 0,
+      take: paginate && paginate.limit ? paginate.limit : 30,
+      skip: paginate && paginate.offset ? paginate.offset : 0,
     };
 
     const order = {

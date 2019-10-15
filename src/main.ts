@@ -14,6 +14,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors();
+
   const port = getOsEnv('PORT', '8080');
   logger.log('App binding to port:' + port, 'AppModule');
   await app.listen(port);

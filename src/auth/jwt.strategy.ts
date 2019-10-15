@@ -19,7 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
-
+    user.roles = await this.userService.getUserRoleNames(user);
+    delete user.passwordHash;
     return user;
   }
 }
