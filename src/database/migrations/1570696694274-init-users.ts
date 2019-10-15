@@ -24,11 +24,11 @@ export class InitUsers1570696694274 implements MigrationInterface {
           type: 'varchar',
         },
         {
-          name: 'creationDate',
+          name: 'createAt',
           type: 'datetime',
         },
         {
-          name: 'updateDate',
+          name: 'updateAt',
           type: 'datetime',
         },
       ],
@@ -53,7 +53,7 @@ export class InitUsers1570696694274 implements MigrationInterface {
           type: 'varchar',
         },
         {
-          name: 'creationDate',
+          name: 'createAt',
           type: 'varchar',
         },
       ],
