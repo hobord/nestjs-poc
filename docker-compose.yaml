@@ -55,7 +55,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "8081:80"
+      - "9080:80"
   nest-app:
     image: node
     # build:
@@ -65,7 +65,7 @@ services:
     working_dir: /app/
     # install:
     environment:
-      PORT: "8080"
+      PORT: "9090"
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
       LOG_LEVEL: "debug"
       GRAPHQL_DEBUG: "false"
@@ -93,7 +93,7 @@ services:
       - ./:/app
       - "node-modules:/app/node_modules"
     ports:
-      - "8080:8080"
+      - "9090:9090"
     depends_on:
       - mysql
 volumes:
