@@ -3,7 +3,7 @@ import { ExampleService } from './example.service';
 import { Example } from './dto/example.dto';
 import { ExampleInput } from './dto/input-example.input';
 
-@Resolver()
+@Resolver(of => Example)
 export class ExampleResolver {
   constructor(
     private readonly exampleService: ExampleService,
