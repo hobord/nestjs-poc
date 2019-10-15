@@ -17,8 +17,8 @@ export class UserModel implements IUser {
   passwordHash: string;
 
   @Column()
-  readonly creationDate: Date;
+  readonly createAt: Date;
 
   @Column()
-  updateDate: Date;
+  updateAt: Date;
 }

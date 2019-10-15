@@ -13,8 +13,8 @@ export class Example {
   readonly title?: string;
 
   @Field({ nullable: true })
-  creationDate?: Date;
+  createAt?: Date;
 
   @Field({ nullable: true })
-  updateDate?: Date;
+  updateAt?: Date;
 }

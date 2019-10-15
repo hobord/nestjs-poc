@@ -21,8 +21,8 @@ export class User {
   readonly roles?: string[];
 
   @Field({ nullable: true })
-  readonly creationDate?: Date;
+  readonly createAt?: Date;
 
   @Field({ nullable: true })
-  readonly updateDate?: Date;
+  readonly updateAt?: Date;
 }

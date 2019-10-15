@@ -4,6 +4,6 @@ export interface IUser {
   readonly name?: string;
   readonly roles?: string[];
   readonly passwordHash?: string;
-  readonly creationDate?: Date;
-  readonly updateDate?: Date;
+  readonly createAt?: Date;
+  readonly updateAt?: Date;
 }

@@ -13,5 +13,5 @@ export class UserRoleModel implements IUserRole {
   roleName: string;
 
   @Column()
-  creationDate: Date;
+  createAt: Date;
 }

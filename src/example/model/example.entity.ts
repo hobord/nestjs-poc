@@ -10,8 +10,8 @@ export class ExampleModel implements IExample {
   readonly title: string;
 
   @Column()
-  readonly creationDate: Date;
+  readonly createAt: Date;
 
   @Column()
-  readonly updateDate: Date;
+  readonly updateAt: Date;
 }

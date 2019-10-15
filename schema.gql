@@ -13,8 +13,8 @@ scalar Date
 type Example {
   id: ID!
   title: String
-  creationDate: Date
-  updateDate: Date
+  createAt: Date
+  updateAt: Date
 }
 
 input ExampleInput {
@@ -43,7 +43,6 @@ type Query {
   whoAmI: User!
   users(paginate: PaginateInput!): [User!]!
   user(id: String!): User!
-  exampleHello: String!
   examples: [Example!]
   example(id: String!): Example
   login(password: String!, username: String!): AuthResult!
@@ -60,8 +59,8 @@ type User {
   email: String!
   name: String!
   roles: [String!]
-  creationDate: Date
-  updateDate: Date
+  createAt: Date
+  updateAt: Date
 }
 
 input UserInput {

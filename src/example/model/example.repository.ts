@@ -35,7 +35,7 @@ export class ExampleRepository implements IExampleRepository {
   async update(id: string, example: IExample): Promise<IExample> {
     const updateData = {
       ...example,
-      updateDate: new Date(),
+      updateAt: new Date(),
     };
     let model = await this.repository.findOne(id);
     model = Object.assign(model, updateData);

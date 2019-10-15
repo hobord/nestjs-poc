@@ -10,8 +10,8 @@ export class UserModelFactory {
       name: data.name,
       email: data.email,
       passwordHash: data.passwordHash,
-      creationDate: now,
-      updateDate: now,
+      createAt: now,
+      updateAt: now,
     };
     const model = new UserModel();
     return Object.assign(model, createData);

@@ -61,7 +61,7 @@ export class UserRepository implements IUserRepository {
   async update(id: string, data: IUser): Promise<IUser> {
     const updateData = {
       ...data,
-      updateDate: new Date(),
+      updateAt: new Date(),
     };
     let model = await this.repository.findOne(id);
     model = Object.assign(model, updateData);

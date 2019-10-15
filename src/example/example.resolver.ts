@@ -9,11 +9,6 @@ export class ExampleResolver {
     private readonly exampleService: ExampleService,
   ) {}
 
-  @Query(() => String)
-  async exampleHello() {
-    return 'hello';
-  }
-
   @Query(() => [Example], {nullable: true})
   async examples(): Promise<Example[]> {
     return this.exampleService.findAll();

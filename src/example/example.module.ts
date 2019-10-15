@@ -18,7 +18,7 @@ import { AuthModule } from '../auth/auth.module';
     providers: [ExampleModelFactory, ExampleRepository, ExampleResolver, ExampleService],
 })
 export class ExampleModule {
-    constructor(private roleSerice: RoleService) {
-        this.roleSerice.addRole({name: 'example', description: 'Example Role'});
+    constructor(private roleService: RoleService) {
+        this.roleService.addRole({name: 'example', description: 'Example Role'});
     }
 }
