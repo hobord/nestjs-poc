@@ -31,7 +31,15 @@ import { RoleService } from './role.service';
 })
 export class AuthModule {
   constructor(private roleSerice: RoleService) {
+    this.registerRoles();
+  }
+
+  registerRoles() {
     this.roleSerice.addRole({name: 'authenticated', description: 'All authenticated users'});
     this.roleSerice.addRole({name: 'root', description: 'Root level user'});
+    this.roleSerice.addRole({
+      name: 'usermanager',
+      description: 'User manager Role',
+    });
   }
 }

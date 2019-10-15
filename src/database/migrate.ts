@@ -14,9 +14,6 @@ async function bootstrap() {
   await migration.runMigrations();
 
   await appContext.close();
-  // console.log('hi');
-  // process.exit();
-  // process.kill(process.pid, 'SIGTERM');
 }
 
 bootstrap();

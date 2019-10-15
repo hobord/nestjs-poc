@@ -23,11 +23,4 @@ import { RoleService } from '../auth/role.service';
   ],
   exports: [UserService],
 })
-export class UserModule {
-  constructor(private roleSerice: RoleService) {
-    this.roleSerice.addRole({
-      name: 'usermanager',
-      description: 'User manager Role',
-    });
-  }
-}
+export class UserModule {}
