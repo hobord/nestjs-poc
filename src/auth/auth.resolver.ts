@@ -11,7 +11,7 @@ export class AuthResolver {
     private readonly roleService: RoleService,
   ) {}
 
-  @Query(() => AuthResult)
+  @Query(() => AuthResult, {description: 'Login into the system'})
   async login(
     @Args('username') username: string,
     @Args('password') password: string,
@@ -20,7 +20,7 @@ export class AuthResolver {
     return this.authService.login(user);
   }
 
-  @Query(() => [Role])
+  @Query(() => [Role], {description: 'Get all roles names what are exists in the system'})
   async authRoles(): Promise<Role[]> {
     return await this.roleService.getRoles();
   }

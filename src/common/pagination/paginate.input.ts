@@ -1,7 +1,7 @@
 import { InputType, Field } from 'type-graphql';
 import { IPaginate } from './paginate.interface';
 
-@InputType()
+@InputType({ description: 'pagination of the list' })
 export class PaginateInput implements IPaginate {
   @Field()
   readonly limit: number;

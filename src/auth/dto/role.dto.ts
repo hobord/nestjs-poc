@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from 'type-graphql';
 import { IsString } from 'class-validator';
 
-@ObjectType()
+@ObjectType({description: 'Security role'})
 export class Role {
   @Field()
   @IsString()
