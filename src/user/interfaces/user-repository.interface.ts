@@ -5,9 +5,9 @@ import { IOrderByInput } from '../../common/order/order-by.input.interface';
 
 export interface IUserRepository {
   create(createUserDto: UserInput): Promise<IUser>;
-  findOne(id: string): Promise<IUser>;
+  getByID(id: string): Promise<IUser>;
   getByEmail(email: string): Promise<IUser>;
-  findAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]>;
+  getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]>;
   delete(id: string): Promise<IUser>;
   update(id: string, data: IUser): Promise<IUser>;
 }

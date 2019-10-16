@@ -11,12 +11,12 @@ export class ExampleResolver {
 
   @Query(() => [Example], {nullable: true})
   async examples(): Promise<Example[]> {
-    return this.exampleService.findAll();
+    return this.exampleService.getAll();
   }
 
   @Query(() => Example, {nullable: true})
   async example(@Args('id') id: string): Promise<Example> {
-    return this.exampleService.findOne(id);
+    return this.exampleService.getByID(id);
   }
 
   @Mutation(() => Example)

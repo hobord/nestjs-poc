@@ -29,7 +29,7 @@ export class UserResolver {
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
   whoAmI(@CurrentUser() user: User) {
-    return this.userService.findOne(user.id);
+    return this.userService.getByID(user.id);
   }
 
   @Query(() => [User], {description: 'List of users. Access roles:[authenticated]'})
@@ -39,14 +39,14 @@ export class UserResolver {
     @Args({name: 'paginate', type: () => PaginateInput, nullable: true}) paginate?: PaginateInput,
     @Args({name: 'orderby', type: () => [OrderByInput], nullable: true}) orderBy?: OrderByInput[],
     ) {
-    return this.userService.findAll(paginate, orderBy);
+    return this.userService.getAll(paginate, orderBy);
   }
 
   @Query(() => User, {description: 'Get user by id. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
   async user(@Args('id') id: string) {
-    return this.userService.findOne(id);
+    return this.userService.getByID(id);
   }
 
   @ResolveProperty(() => Roles, {description: 'Get user\'s roles. Access roles:[authenticated]'})
@@ -91,7 +91,7 @@ export class UserResolver {
     @Args('roleName') roleName: string,
     @Args('user') userInput: UserInput,
   ) {
-    const user = await this.userService.findOne(userInput.email);
+    const user = await this.userService.getByID(userInput.email);
     return this.userService.addUserRole(user, roleName);
   }
 
@@ -102,7 +102,7 @@ export class UserResolver {
     @Args('roleName') roleName: string,
     @Args('user') userInput: UserInput,
   ) {
-    const user = await this.userService.findOne(userInput.email);
+    const user = await this.userService.getByID(userInput.email);
     return this.userService.removeUserRole(user, roleName);
   }
 }

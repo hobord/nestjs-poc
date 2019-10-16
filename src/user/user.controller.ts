@@ -13,7 +13,7 @@ export class UserController {
   @UseGuards(RestAuthGuard, RestRolesGuard)
   @Roles('root', 'usermanager')
   async getUsers(@Request() req) {
-    const users = await this.userService.findAll();
+    const users = await this.userService.getAll();
     users.map(user => delete user.passwordHash);
     return users;
   }
@@ -21,8 +21,8 @@ export class UserController {
   @Get(':id')
   @UseGuards(RestAuthGuard, RestRolesGuard)
   @Roles('root', 'usermanager')
-  async findOne(@Param('id') id) {
-    const user = await this.userService.findOne(id);
+  async getByID(@Param('id') id) {
+    const user = await this.userService.getByID(id);
     user.roles = await this.userService.getUserRoleNames(user);
     delete user.passwordHash;
     return user;

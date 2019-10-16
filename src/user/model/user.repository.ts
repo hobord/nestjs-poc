@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
     return await this.repository.save(model);
   }
 
-  async findOne(id: string): Promise<IUser> {
+  async getByID(id: string): Promise<IUser> {
     const model = await this.repository.findOne(id);
     return model;
   }
@@ -35,7 +35,7 @@ export class UserRepository implements IUserRepository {
     return model;
   }
 
-  async findAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
+  async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
     const pager = {
       take: paginate && paginate.limit ? paginate.limit : 30,
       skip: paginate && paginate.offset ? paginate.offset : 0,

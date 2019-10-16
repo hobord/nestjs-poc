@@ -3,6 +3,8 @@ import { IExample } from './interfaces/example.interface';
 import { ExampleInput } from './dto/input-example.input';
 import { ExampleRepository } from './model/example.repository';
 import { IExampleRepository } from './interfaces/example-repository.interface';
+import { IPaginate } from '../common/pagination/paginate.interface';
+import { IOrderByInput } from '../common/order/order-by.input.interface';
 
 @Injectable()
 export class ExampleService {
@@ -14,12 +16,12 @@ export class ExampleService {
     return await this.repository.create(createExampleDto);
   }
 
-  async findAll(): Promise<IExample[]> {
-    return await this.repository.findAll();
+  async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IExample[]> {
+    return await this.repository.getAll(paginate, orderBy);
   }
 
-  async findOne(id: string): Promise<IExample> {
-    return await this.repository.findOne(id);
+  async getByID(id: string): Promise<IExample> {
+    return await this.repository.getByID(id);
   }
 
   async delete(id: string) {
