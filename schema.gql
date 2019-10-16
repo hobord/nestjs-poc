@@ -74,7 +74,7 @@ type Query {
 
   """Get user by id. Access roles:[authenticated]"""
   user(id: String!): User!
-  examples: [Example!]
+  examples(orderby: [OrderByInput!], paginate: PaginateInput): [Example!]
   example(id: String!): Example
 
   """Login into the system"""
