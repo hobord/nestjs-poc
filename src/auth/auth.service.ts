@@ -15,12 +15,12 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<IUser> {
     const user = await this.usersService.getByEmail(username);
-    if (
-      user &&
-      (await this.usersService.compareHash(pass, user.passwordHash))
-    ) {
-      const { passwordHash, ...result } = user;
-      return result;
+    if (user) {
+      const userPasswordHash = await this.usersService.getUserPasswordHash(user.id);
+      if (await this.usersService.compareHash(pass, userPasswordHash)) {
+        const { passwordHash, ...result } = user;
+        return result;
+      }
     }
     return null;
   }

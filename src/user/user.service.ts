@@ -35,27 +35,42 @@ export class UserService {
   }
 
   async findAll(paginate?: IPaginate): Promise<IUser[]> {
-    return await this.repository.findAll(paginate);
+    const users = await this.repository.findAll(paginate);
+    users.map(user => delete user.passwordHash);
+    return users;
   }
 
   async findOne(id: string): Promise<IUser> {
-    return await this.repository.findOne(id);
+    const user = await this.repository.findOne(id);
+    delete user.passwordHash;
+    return user;
   }
 
   async getByEmail(email: string): Promise<IUser> {
-    return await this.repository.getByEmail(email);
+    const user = await this.repository.getByEmail(email);
+    delete user.passwordHash;
+    return user;
   }
 
   async delete(id: string) {
-    return await this.repository.delete(id);
+    const user = await this.repository.delete(id);
+    delete user.passwordHash;
+    return user;
   }
 
   async update(id: string, userInput: UserInput): Promise<IUser> {
-    return await this.repository.update(id, userInput);
+    const user = await this.repository.update(id, userInput);
+    delete user.passwordHash;
+    return user;
   }
 
   private async getHash(password: string | undefined): Promise<string> {
     return argon2.hash(password);
+  }
+
+  async getUserPasswordHash(userId: string): Promise<string> {
+    const userModel = await this.repository.findOne(userId);
+    return userModel.passwordHash;
   }
 
   async compareHash(

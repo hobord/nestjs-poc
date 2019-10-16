@@ -2,6 +2,9 @@ import { InputType, Field } from 'type-graphql';
 
 @InputType()
 export class UserInput {
+  @Field({ nullable: true })
+  readonly id?: string;
+
   @Field()
   readonly email: string;
 
