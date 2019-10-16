@@ -42,25 +42,33 @@ export class UserService {
 
   async findOne(id: string): Promise<IUser> {
     const user = await this.repository.findOne(id);
-    delete user.passwordHash;
+    if (user) {
+      delete user.passwordHash;
+    }
     return user;
   }
 
   async getByEmail(email: string): Promise<IUser> {
     const user = await this.repository.getByEmail(email);
-    delete user.passwordHash;
+    if (user) {
+      delete user.passwordHash;
+    }
     return user;
   }
 
   async delete(id: string) {
     const user = await this.repository.delete(id);
-    delete user.passwordHash;
+    if (user) {
+      delete user.passwordHash;
+    }
     return user;
   }
 
   async update(id: string, userInput: UserInput): Promise<IUser> {
     const user = await this.repository.update(id, userInput);
-    delete user.passwordHash;
+    if (user) {
+      delete user.passwordHash;
+    }
     return user;
   }
 
