@@ -4,7 +4,7 @@ import { createComplexityLimitRule } from 'graphql-validation-complexity';
 // import depthLimit from 'graphql-depth-limit';
 import { toBool, getOsEnv, toNumber } from '../lib/env';
 import { Logger } from 'winston';
-import { DeprecatedDirective, RestDirective, FormattableDateDirective } from '../common/directives';
+// import { DeprecatedDirective, RestDirective, FormattableDateDirective } from '../common/directives';
 // import { GraphQLSchema } from 'graphql';
 // import { mergeSchemas } from 'graphql-tools';
 
@@ -28,10 +28,10 @@ const complexityLimitRule = createComplexityLimitRule(toNumber(getOsEnv('GRAPHQL
   ),
 });
 
-const schemaDirectives = {
-  deprecated: DeprecatedDirective,
-  rest: RestDirective,
-};
+// const schemaDirectives = {
+//   deprecated: DeprecatedDirective,
+//   rest: RestDirective,
+// };
 
 @Injectable()
 export class GraphqlConfigService implements GqlOptionsFactory {
