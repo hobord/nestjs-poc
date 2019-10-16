@@ -50,6 +50,12 @@ type Mutation {
   deleteExample(id: String!): Example!
 }
 
+"""order by column property in lists"""
+input OrderByInput {
+  column: String!
+  desc: Boolean!
+}
+
 """pagination of the list"""
 input PaginateInput {
   limit: Float!
@@ -64,7 +70,7 @@ type Query {
   whoAmI: User!
 
   """List of users. Access roles:[authenticated]"""
-  users(paginate: PaginateInput): [User!]!
+  users(orderby: [OrderByInput!], paginate: PaginateInput): [User!]!
 
   """Get user by id. Access roles:[authenticated]"""
   user(id: String!): User!

@@ -14,6 +14,7 @@ import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { GqlRolesGuard } from '../auth/graphql-roles.guard';
 import { Roles } from '../auth/roles.decoraqtor';
 import { PaginateInput } from '../common/pagination/paginate.input';
+import { OrderByInput } from '../common/order/order-by.input';
 
 @Resolver(of => User)
 export class UserResolver {
@@ -34,8 +35,11 @@ export class UserResolver {
   @Query(() => [User], {description: 'List of users. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard) // { nullable: true }, 'paginate'
-  async users(@Args({name: 'paginate', type: () => PaginateInput, nullable: true}) paginate?: PaginateInput) {
-    return this.userService.findAll(paginate);
+  async users(
+    @Args({name: 'paginate', type: () => PaginateInput, nullable: true}) paginate?: PaginateInput,
+    @Args({name: 'orderby', type: () => [OrderByInput], nullable: true}) orderBy?: OrderByInput[],
+    ) {
+    return this.userService.findAll(paginate, orderBy);
   }
 
   @Query(() => User, {description: 'Get user by id. Access roles:[authenticated]'})

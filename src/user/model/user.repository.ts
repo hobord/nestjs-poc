@@ -7,6 +7,7 @@ import { UserInput } from '../dto/input-user.input';
 import { UserModel } from './user.entity';
 import { UserModelFactory } from './user-model.factory';
 import { IPaginate } from '../../common/pagination/paginate.interface';
+import { IOrderByInput } from '../../common/order/order-by.input.interface';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -34,15 +35,23 @@ export class UserRepository implements IUserRepository {
     return model;
   }
 
-  async findAll(paginate?: IPaginate): Promise<IUser[]> {
+  async findAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
     const pager = {
       take: paginate && paginate.limit ? paginate.limit : 30,
       skip: paginate && paginate.offset ? paginate.offset : 0,
     };
 
-    const order = {
-      order: { name: 'ASC' },
-    };
+    let order = { order: {}};
+    if (orderBy) {
+      order.order = {};
+      for (const orderItem of orderBy) {
+        order.order[orderItem.column] = orderItem.desc ? 'DESC' : 'ASC';
+      }
+    } else {
+      order = {
+        order: { name: 'ASC' },
+      };
+    }
 
     const models = await this.repository.find({
       where: {
