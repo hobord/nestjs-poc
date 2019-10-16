@@ -6,6 +6,7 @@ import { IUserRepository } from './interfaces/user-repository.interface';
 import * as argon2 from 'argon2';
 import { UserRoleRepository } from './model/user-role.repository';
 import { IPaginate } from '../common/pagination/paginate.interface';
+import { IOrderByInput } from '../common/order/order-by.input.interface';
 
 @Injectable()
 export class UserService {
@@ -34,14 +35,14 @@ export class UserService {
     return user;
   }
 
-  async findAll(paginate?: IPaginate): Promise<IUser[]> {
-    const users = await this.repository.findAll(paginate);
+  async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
+    const users = await this.repository.getAll(paginate, orderBy);
     users.map(user => delete user.passwordHash);
     return users;
   }
 
-  async findOne(id: string): Promise<IUser> {
-    const user = await this.repository.findOne(id);
+  async getByID(id: string): Promise<IUser> {
+    const user = await this.repository.getByID(id);
     if (user) {
       delete user.passwordHash;
     }
@@ -77,7 +78,7 @@ export class UserService {
   }
 
   async getUserPasswordHash(userId: string): Promise<string> {
-    const userModel = await this.repository.findOne(userId);
+    const userModel = await this.repository.getByID(userId);
     return userModel.passwordHash;
   }
 

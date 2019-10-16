@@ -6,6 +6,8 @@ import { IExample } from '../interfaces/example.interface';
 import { ExampleInput } from '../dto/input-example.input';
 import { ExampleModel } from './example.entity';
 import { ExampleModelFactory } from './example-model.factory';
+import { IPaginate } from '../../common/pagination/paginate.interface';
+import { IOrderByInput } from '../../common/order/order-by.input.interface';
 
 @Injectable()
 export class ExampleRepository implements IExampleRepository {
@@ -19,12 +21,33 @@ export class ExampleRepository implements IExampleRepository {
     return this.repository.save(model);
   }
 
-  async findOne(id: string): Promise<IExample> {
+  async getByID(id: string): Promise<IExample> {
     const model = await this.repository.findOne(id);
     return model;
   }
-  async findAll(): Promise<IExample[]> {
-    const models = await this.repository.find();
+  async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IExample[]> {
+    const pager = {
+      take: paginate && paginate.limit ? paginate.limit : 30,
+      skip: paginate && paginate.offset ? paginate.offset : 0,
+    };
+
+    let order = { order: {}};
+    if (orderBy) {
+      order.order = {};
+      for (const orderItem of orderBy) {
+        order.order[orderItem.column] = orderItem.desc ? 'DESC' : 'ASC';
+      }
+    } else {
+      order = {
+        order: { name: 'ASC' },
+      };
+    }
+    const models = await this.repository.find({
+      where: {
+        ...order,
+      },
+      ...pager,
+    });
     return models;
   }
   async delete(id: string): Promise<IExample> {
