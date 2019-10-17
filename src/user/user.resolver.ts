@@ -4,6 +4,7 @@ import {
   Mutation,
   Args,
   ResolveProperty,
+  Root,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { User } from './dto/user.dto';
@@ -52,7 +53,9 @@ export class UserResolver {
   @ResolveProperty(() => Roles, {description: 'Get user\'s roles. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async roles(@CurrentUser() user: User): Promise<string[]> {
+  async roles(
+    @Root() user: User,
+  ): Promise<string[]> {
     return await this.userService.getUserRoleNames(user);
   }
 
