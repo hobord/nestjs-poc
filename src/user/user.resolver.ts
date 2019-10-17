@@ -69,15 +69,15 @@ export class UserResolver {
   @Mutation(() => User, {description: 'Update a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateUser(@Args('id') id: string, @Args('input') input: UserInput) {
-    return this.userService.update(id, input);
+  async updateUser(@Args('user') user: UserInput) {
+    return this.userService.update(user.id, user);
   }
 
   @Mutation(() => User, {description: 'Update the current authenticated user. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateMe(@CurrentUser() user: User, @Args('input') input: UserInput) {
-    return this.userService.update(user.id, input);
+  async updateMe(@CurrentUser() user: User, @Args('userData') userData: UserInput) {
+    return this.userService.update(user.id, userData);
   }
 
   @Mutation(() => User, {description: 'Delete a user. Access roles:[root, usermanager]'})
