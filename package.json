@@ -63,7 +63,7 @@
     "@types/passport-jwt": "^3.0.2",
     "@types/passport-local": "^1.0.33",
     "@types/supertest": "2.0.8",
-    "generator-nestjs-app-hobord": "^1.0.10",
+    "generator-nestjs-app-hobord": "^1.0.11",
     "jest": "24.9.0",
     "prettier": "1.18.2",
     "supertest": "4.0.2",
