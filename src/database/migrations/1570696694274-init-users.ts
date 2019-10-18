@@ -7,7 +7,8 @@ export class InitUsers1570696694274 implements MigrationInterface {
       columns: [
         {
           name: 'id',
-          type: 'varchar',
+          type: 'char',
+          length: '36',
           isPrimary: true,
         },
         {
@@ -40,12 +41,14 @@ export class InitUsers1570696694274 implements MigrationInterface {
       columns: [
         {
           name: 'id',
-          type: 'varchar',
+          type: 'char',
+          length: '36',
           isPrimary: true,
         },
         {
           name: 'userId',
-          type: 'varchar',
+          type: 'char',
+          length: '36',
           isNullable: false,
         },
         {
