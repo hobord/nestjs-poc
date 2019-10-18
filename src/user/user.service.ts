@@ -6,6 +6,7 @@ import { IUserRepository } from './interfaces/user-repository.interface';
 import * as argon2 from 'argon2';
 import { UserRoleRepository } from './model/user-role.repository';
 import { IPaginate } from '../common/pagination/paginate.interface';
+import { IOrderByInput } from '../common/order/order-by.input.interface';
 
 @Injectable()
 export class UserService {
@@ -34,28 +35,51 @@ export class UserService {
     return user;
   }
 
-  async findAll(paginate?: IPaginate): Promise<IUser[]> {
-    return await this.repository.findAll(paginate);
+  async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
+    const users = await this.repository.getAll(paginate, orderBy);
+    users.map(user => delete user.passwordHash);
+    return users;
   }
 
-  async findOne(id: string): Promise<IUser> {
-    return await this.repository.findOne(id);
+  async getByID(id: string): Promise<IUser> {
+    const user = await this.repository.getByID(id);
+    if (user) {
+      delete user.passwordHash;
+    }
+    return user;
   }
 
   async getByEmail(email: string): Promise<IUser> {
-    return await this.repository.getByEmail(email);
+    const user = await this.repository.getByEmail(email);
+    if (user) {
+      delete user.passwordHash;
+    }
+    return user;
   }
 
   async delete(id: string) {
-    return await this.repository.delete(id);
+    const user = await this.repository.delete(id);
+    if (user) {
+      delete user.passwordHash;
+    }
+    return user;
   }
 
   async update(id: string, userInput: UserInput): Promise<IUser> {
-    return await this.repository.update(id, userInput);
+    const user = await this.repository.update(id, userInput);
+    if (user) {
+      delete user.passwordHash;
+    }
+    return user;
   }
 
   private async getHash(password: string | undefined): Promise<string> {
     return argon2.hash(password);
+  }
+
+  async getUserPasswordHash(userId: string): Promise<string> {
+    const userModel = await this.repository.getByID(userId);
+    return userModel.passwordHash;
   }
 
   async compareHash(

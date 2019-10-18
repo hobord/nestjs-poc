@@ -36,7 +36,7 @@ export class UserRoleRepository implements IUserRoleRepository {
     const createData = {
       userId: data.userId,
       roleName: data.roleName,
-      creationDate: now,
+      createAt: now,
     };
     const model = new UserRoleModel();
     return Object.assign(model, createData);

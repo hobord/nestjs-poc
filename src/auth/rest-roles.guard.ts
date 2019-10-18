@@ -1,10 +1,9 @@
-import { ExecutionContext, Injectable, CanActivate } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserService } from '../user/user.service';
 
 @Injectable()
-export class GqlRolesGuard implements CanActivate {
+export class RestRolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly userService: UserService,
@@ -15,13 +14,13 @@ export class GqlRolesGuard implements CanActivate {
     if (!roles) {
       return true;
     }
-    const ctx = GqlExecutionContext.create(context);
-    const { req } = ctx.getContext();
-    const user = req.user;
-    // const userRoles = user.roles;
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
+
     const userRoles = await this.userService.getUserRoleNames(user);
     const hasRole = () =>
       userRoles.some(role => !!roles.find(item => item === role));
+
     return userRoles && hasRole();
   }
 }

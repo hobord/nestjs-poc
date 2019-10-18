@@ -7,6 +7,7 @@ import { UserInput } from '../dto/input-user.input';
 import { UserModel } from './user.entity';
 import { UserModelFactory } from './user-model.factory';
 import { IPaginate } from '../../common/pagination/paginate.interface';
+import { IOrderByInput } from '../../common/order/order-by.input.interface';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -20,7 +21,7 @@ export class UserRepository implements IUserRepository {
     return await this.repository.save(model);
   }
 
-  async findOne(id: string): Promise<IUser> {
+  async getByID(id: string): Promise<IUser> {
     const model = await this.repository.findOne(id);
     return model;
   }
@@ -34,15 +35,23 @@ export class UserRepository implements IUserRepository {
     return model;
   }
 
-  async findAll(paginate?: IPaginate): Promise<IUser[]> {
+  async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
     const pager = {
-      take: paginate.limit || 30,
-      skip: paginate.offset || 0,
+      take: paginate && paginate.limit ? paginate.limit : 30,
+      skip: paginate && paginate.offset ? paginate.offset : 0,
     };
 
-    const order = {
-      order: { name: 'ASC' },
-    };
+    let order = { order: {}};
+    if (orderBy) {
+      order.order = {};
+      for (const orderItem of orderBy) {
+        order.order[orderItem.column] = orderItem.desc ? 'DESC' : 'ASC';
+      }
+    } else {
+      order = {
+        order: { name: 'ASC' },
+      };
+    }
 
     const models = await this.repository.find({
       where: {
@@ -61,7 +70,7 @@ export class UserRepository implements IUserRepository {
   async update(id: string, data: IUser): Promise<IUser> {
     const updateData = {
       ...data,
-      updateDate: new Date(),
+      updateAt: new Date(),
     };
     let model = await this.repository.findOne(id);
     model = Object.assign(model, updateData);

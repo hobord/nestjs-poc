@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IUser } from '../interfaces/user.interface';
-import { UserService } from '../user.service';
 
 @Entity({ name: 'user' })
 export class UserModel implements IUser {
@@ -17,8 +16,8 @@ export class UserModel implements IUser {
   passwordHash: string;
 
   @Column()
-  readonly creationDate: Date;
+  readonly createAt: Date;
 
   @Column()
-  updateDate: Date;
+  updateAt: Date;
 }

@@ -2,26 +2,26 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ExampleService } from './example.service';
 import { Example } from './dto/example.dto';
 import { ExampleInput } from './dto/input-example.input';
+import { PaginateInput } from '../common/pagination/paginate.input';
+import { OrderByInput } from '../common/order/order-by.input';
 
-@Resolver()
+@Resolver(of => Example)
 export class ExampleResolver {
   constructor(
     private readonly exampleService: ExampleService,
   ) {}
 
-  @Query(() => String)
-  async exampleHello() {
-    return 'hello';
-  }
-
   @Query(() => [Example], {nullable: true})
-  async examples(): Promise<Example[]> {
-    return this.exampleService.findAll();
+  async examples(
+    @Args({name: 'paginate', type: () => PaginateInput, nullable: true}) paginate?: PaginateInput,
+    @Args({name: 'orderby', type: () => [OrderByInput], nullable: true}) orderBy?: OrderByInput[],
+  ): Promise<Example[]> {
+    return this.exampleService.getAll(paginate, orderBy);
   }
 
   @Query(() => Example, {nullable: true})
   async example(@Args('id') id: string): Promise<Example> {
-    return this.exampleService.findOne(id);
+    return this.exampleService.getByID(id);
   }
 
   @Mutation(() => Example)

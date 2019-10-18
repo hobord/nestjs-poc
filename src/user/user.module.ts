@@ -9,6 +9,7 @@ import { ScalarsModule } from '../common/scalars/scalars.module';
 import { UserRoleRepository } from './model/user-role.repository';
 import { UserRoleModel } from './model/user-role.entity';
 import { RoleService } from '../auth/role.service';
+import { UserController } from './user.controller';
 
 @Global()
 @Module({
@@ -21,13 +22,7 @@ import { RoleService } from '../auth/role.service';
     UserService,
     RoleService,
   ],
+  controllers: [UserController],
   exports: [UserService],
 })
-export class UserModule {
-  constructor(private roleSerice: RoleService) {
-    this.roleSerice.addRole({
-      name: 'usermanager',
-      description: 'User manager Role',
-    });
-  }
-}
+export class UserModule {}

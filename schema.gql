@@ -3,7 +3,9 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""Authentication response with JWT token"""
 type AuthResult {
+  """JWT token"""
   access_token: String!
 }
 
@@ -13,8 +15,8 @@ scalar Date
 type Example {
   id: ID!
   title: String
-  creationDate: Date
-  updateDate: Date
+  createAt: Date
+  updateAt: Date
 }
 
 input ExampleInput {
@@ -22,52 +24,92 @@ input ExampleInput {
 }
 
 type Mutation {
+  """Create a user. Access roles:[root, usermanager]"""
   createUser(input: UserInput!): User!
+
+  """Update a user. Access roles:[root, usermanager]"""
   updateUser(input: UserInput!, id: String!): User!
+
+  """Update the current authenticated user. Access roles:[authenticated]"""
   updateMe(input: UserInput!): User!
+
+  """Delete a user. Access roles:[root, usermanager]"""
   deleteUser(id: String!): User!
+
+  """
+  Assign a permission role into the user. Access roles:[root, usermanager]
+  """
   addRoleToUser(user: UserInput!, roleName: String!): User!
+
+  """
+  Revoke a permission role into the user. Access roles:[root, usermanager]
+  """
   removeRoleFromUser(user: UserInput!, roleName: String!): User!
   createExample(input: ExampleInput!): Example!
   updateExample(input: ExampleInput!, id: String!): Example!
   deleteExample(id: String!): Example!
 }
 
+"""order by column property in lists"""
+input OrderByInput {
+  column: String!
+  desc: Boolean!
+}
+
+"""pagination of the list"""
 input PaginateInput {
   limit: Float!
   offset: Float
 }
 
 type Query {
+  """example query"""
   userHello: String!
+
+  """Get the current authenticated user. Access roles:[authenticated]"""
   whoAmI: User!
-  users(paginate: PaginateInput!): [User!]!
+
+  """List of users. Access roles:[authenticated]"""
+  users(orderby: [OrderByInput!], paginate: PaginateInput): [User!]!
+
+  """Get user by id. Access roles:[authenticated]"""
   user(id: String!): User!
-  exampleHello: String!
-  examples: [Example!]
+  examples(orderby: [OrderByInput!], paginate: PaginateInput): [Example!]
   example(id: String!): Example
+
+  """Login into the system"""
   login(password: String!, username: String!): AuthResult!
+
+  """Get all roles names what are exists in the system"""
   authRoles: [Role!]!
 }
 
+"""Security role"""
 type Role {
   name: String!
   description: String!
 }
 
 type User {
+  """UUID"""
   id: ID!
   email: String!
   name: String!
+
+  """assigned security roles"""
   roles: [String!]
-  creationDate: Date
-  updateDate: Date
+  createAt: Date
+  updateAt: Date
 }
 
 input UserInput {
+  """UUID of user"""
+  id: String
   email: String!
   name: String
   password: String
   passwordHash: String
+
+  """assigned security roles"""
   roles: [String!]
 }

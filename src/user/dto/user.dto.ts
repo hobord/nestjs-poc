@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty } from 'class-validator';
 
 @ObjectType()
 export class User {
-  @Field(() => ID)
+  @Field(() => ID, {description: 'UUID'})
   @IsString()
   readonly id?: string;
 
@@ -17,12 +17,12 @@ export class User {
   @IsNotEmpty()
   readonly name?: string;
 
-  @Field(type => [String], { nullable: true })
+  @Field(type => [String], { nullable: true, description: 'assigned security roles' })
   readonly roles?: string[];
 
   @Field({ nullable: true })
-  readonly creationDate?: Date;
+  readonly createAt?: Date;
 
   @Field({ nullable: true })
-  readonly updateDate?: Date;
+  readonly updateAt?: Date;
 }
