@@ -28,10 +28,10 @@ type Mutation {
   createUser(input: UserInput!): User!
 
   """Update a user. Access roles:[root, usermanager]"""
-  updateUser(input: UserInput!, id: String!): User!
+  updateUser(user: UserInput!): User!
 
   """Update the current authenticated user. Access roles:[authenticated]"""
-  updateMe(input: UserInput!): User!
+  updateMe(userData: UserInput!): User!
 
   """Delete a user. Access roles:[root, usermanager]"""
   deleteUser(id: String!): User!
@@ -79,6 +79,9 @@ type Query {
 
   """Login into the system"""
   login(password: String!, username: String!): AuthResult!
+
+  """Renew the jwt token"""
+  refreshToken: AuthResult!
 
   """Get all roles names what are exists in the system"""
   authRoles: [Role!]!
