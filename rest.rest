@@ -11,6 +11,10 @@ content-type: application/json
     "password": "password"
 }
 
+// Refresh token
+GET http://localhost:9090/auth/refresh_token HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNmUzNTczMi1iZGU0LTRjNDUtYmE5ZC05YWZiNGIwNTQyM2IiLCJuYW1lIjoicm9vdCIsImVtYWlsIjoicm9vdEBsb2NhbCIsImlhdCI6MTU3MTgzMTEzMiwiZXhwIjoxNTcxODM0NzMyfQ.Wu05lgaVUrLGQohzprz3ihf_I-CbT4pnKC51YNQE_PQ
+
 
 // Get my user
 GET http://localhost:9090/users/me HTTP/1.1
