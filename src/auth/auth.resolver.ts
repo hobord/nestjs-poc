@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { AuthResult } from './dto/auth-result.dto';
 import { Role } from './dto/role.dto';
@@ -17,7 +17,7 @@ export class AuthResolver {
     private readonly roleService: RoleService,
   ) {}
 
-  @Query(() => AuthResult, {description: 'Login into the system'})
+  @Mutation(() => AuthResult, {description: 'Login into the system'})
   async login(
     @Args('username') username: string,
     @Args('password') password: string,
@@ -26,7 +26,7 @@ export class AuthResolver {
     return this.authService.login(user);
   }
 
-  @Query(() => AuthResult, {description: 'Renew the jwt token'})
+  @Mutation(() => AuthResult, {description: 'Renew the jwt token'})
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
   @Roles('authenticated')
   async refreshToken(@CurrentUser() user: User) {

@@ -48,6 +48,12 @@ type Mutation {
   createExample(input: ExampleInput!): Example!
   updateExample(input: ExampleInput!, id: String!): Example!
   deleteExample(id: String!): Example!
+
+  """Login into the system"""
+  login(password: String!, username: String!): AuthResult!
+
+  """Renew the jwt token"""
+  refreshToken: AuthResult!
 }
 
 """order by column property in lists"""
@@ -76,12 +82,6 @@ type Query {
   user(id: String!): User!
   examples(orderby: [OrderByInput!], paginate: PaginateInput): [Example!]
   example(id: String!): Example
-
-  """Login into the system"""
-  login(password: String!, username: String!): AuthResult!
-
-  """Renew the jwt token"""
-  refreshToken: AuthResult!
 
   """Get all roles names what are exists in the system"""
   authRoles: [Role!]!
