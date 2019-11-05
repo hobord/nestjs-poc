@@ -9,7 +9,7 @@ type AuthResult {
   access_token: String!
 }
 
-"""Date custom scalar type"""
+"""Date custom scalar type (timestamp)"""
 scalar Date
 
 type Example {
@@ -28,10 +28,10 @@ type Mutation {
   createUser(input: UserInput!): User!
 
   """Update a user. Access roles:[root, usermanager]"""
-  updateUser(input: UserInput!, id: String!): User!
+  updateUser(user: UserInput!): User!
 
   """Update the current authenticated user. Access roles:[authenticated]"""
-  updateMe(input: UserInput!): User!
+  updateMe(userData: UserInput!): User!
 
   """Delete a user. Access roles:[root, usermanager]"""
   deleteUser(id: String!): User!
@@ -48,6 +48,12 @@ type Mutation {
   createExample(input: ExampleInput!): Example!
   updateExample(input: ExampleInput!, id: String!): Example!
   deleteExample(id: String!): Example!
+
+  """Login into the system"""
+  login(password: String!, username: String!): AuthResult!
+
+  """Renew the jwt token"""
+  refreshToken: AuthResult!
 }
 
 """order by column property in lists"""
@@ -76,9 +82,6 @@ type Query {
   user(id: String!): User!
   examples(orderby: [OrderByInput!], paginate: PaginateInput): [Example!]
   example(id: String!): Example
-
-  """Login into the system"""
-  login(password: String!, username: String!): AuthResult!
 
   """Get all roles names what are exists in the system"""
   authRoles: [Role!]!

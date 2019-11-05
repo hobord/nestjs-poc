@@ -1,17 +1,25 @@
-import { Controller, Get,  Request, UseGuards, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get,  Request, UseGuards, Post, Param, Body, Put, Delete, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Roles } from '../auth/roles.decoraqtor';
 import { RestRolesGuard } from '../auth/rest-roles.guard';
-import { RestAuthGuard } from '../auth/rest-auth.guard';
 import { UserInput } from './dto/input-user.input';
+import { ApiBearerAuth, ApiUseTags, ApiOperation, ApiImplicitHeader, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { User } from './dto/user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
+@ApiUseTags('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/')
-  @UseGuards(RestAuthGuard, RestRolesGuard)
+  @ApiBearerAuth()
+  @ApiImplicitHeader({ name: 'Authorization', required: true, description: 'JWT Bearer token: Bearer xxxxxxxxx'})
+  @ApiOperation({ title: 'Get users', description: 'Get all users'})
+  @ApiOkResponse({ description: 'Success.', type: [User] })
+  @ApiUnauthorizedResponse({})
   @Roles('root', 'usermanager')
+  @UseGuards(AuthGuard('jwt'), RestRolesGuard)
   async getUsers(@Request() req) {
     const users = await this.userService.getAll();
     users.map(user => delete user.passwordHash);
@@ -19,8 +27,13 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(RestAuthGuard, RestRolesGuard)
+  @ApiBearerAuth()
+  @ApiImplicitHeader({ name: 'Authorization', required: true, description: 'JWT Bearer token: Bearer xxxxxxxxx'})
+  @ApiOperation({ title: 'Get user', description: 'Get user by id'})
+  @ApiOkResponse({ description: 'Success.', type: User })
+  @ApiUnauthorizedResponse({})
   @Roles('root', 'usermanager')
+  @UseGuards(AuthGuard('jwt'), RestRolesGuard)
   async getByID(@Param('id') id) {
     const user = await this.userService.getByID(id);
     user.roles = await this.userService.getUserRoleNames(user);
@@ -29,31 +42,50 @@ export class UserController {
   }
 
   @Get('me')
-  @UseGuards(RestAuthGuard, RestRolesGuard)
+  @ApiBearerAuth()
+  @ApiImplicitHeader({ name: 'Authorization', required: true, description: 'JWT Bearer token: Bearer xxxxxxxxx'})
+  @ApiOperation({ title: 'Who am I', description: 'Get current logged in user'})
+  @ApiOkResponse({ description: 'Success.', type: User })
+  @ApiUnauthorizedResponse({})
   @Roles('authenticated')
+  @UseGuards(AuthGuard('jwt'), RestRolesGuard)
   getProfile(@Request() req) {
     return req.user;
   }
 
   @Post()
-  @UseGuards(RestAuthGuard, RestRolesGuard)
+  @ApiBearerAuth()
+  @ApiImplicitHeader({ name: 'Authorization', required: true, description: 'JWT Bearer token: Bearer xxxxxxxxx'})
+  @ApiOperation({ title: 'Create user', description: 'Create a user'})
+  @ApiOkResponse({ description: 'Success.', type: User })
+  @ApiUnauthorizedResponse({})
   @Roles('root', 'usermanager')
+  @UseGuards(AuthGuard('jwt'), RestRolesGuard)
   async create(@Body() createUserDto: UserInput) {
     const user = await this.userService.create(createUserDto);
     return user;
   }
 
   @Post(':id')
-  @UseGuards(RestAuthGuard, RestRolesGuard)
+  @ApiBearerAuth()
+  @ApiImplicitHeader({ name: 'Authorization', required: true, description: 'JWT Bearer token: Bearer xxxxxxxxx'})
+  @ApiOperation({ title: 'Update user', description: 'Update a user'})
+  @ApiOkResponse({ description: 'Success.', type: User })
   @Roles('root', 'usermanager')
+  @UseGuards(AuthGuard('jwt'), RestRolesGuard)
   async update(@Param('id') id, @Body() updateUser: UserInput) {
     const user = await this.userService.update(id, updateUser);
     return user;
   }
 
   @Delete(':id')
-  @UseGuards(RestAuthGuard, RestRolesGuard)
+  @ApiBearerAuth()
+  @ApiImplicitHeader({ name: 'Authorization', required: true, description: 'JWT Bearer token: Bearer xxxxxxxxx'})
+  @ApiOperation({ title: 'Delete user', description: 'Delete a user'})
+  @ApiOkResponse({ description: 'Success.', type: User })
+  @ApiUnauthorizedResponse({})
   @Roles('root', 'usermanager')
+  @UseGuards(AuthGuard('jwt'), RestRolesGuard)
   async delete(@Param('id') id) {
     const user = await this.userService.delete(id);
     return user;

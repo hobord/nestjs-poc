@@ -67,12 +67,13 @@ export class UserRepository implements IUserRepository {
     this.repository.delete(model);
     return model;
   }
-  async update(id: string, data: IUser): Promise<IUser> {
+  async update(userId: string, userData: IUser): Promise<IUser> {
+    const { id, ...data } = userData;
     const updateData = {
       ...data,
       updateAt: new Date(),
     };
-    let model = await this.repository.findOne(id);
+    let model = await this.repository.findOne(userId);
     model = Object.assign(model, updateData);
     return this.repository.save(model);
   }

@@ -13,7 +13,7 @@ export class Migration {
     this.logger.log('info', 'Migrations start');
     try {
       await this.connection.runMigrations({
-        transaction: false,
+        transaction: 'none',
       });
     } catch (error) {
       this.logger.log('error', error, error);

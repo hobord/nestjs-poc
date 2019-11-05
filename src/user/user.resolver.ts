@@ -4,8 +4,9 @@ import {
   Mutation,
   Args,
   ResolveProperty,
+  Root,
 } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, ValidationPipe } from '@nestjs/common';
 import { User } from './dto/user.dto';
 import { UserInput } from './dto/input-user.input';
 import { UserService } from './user.service';
@@ -52,29 +53,31 @@ export class UserResolver {
   @ResolveProperty(() => Roles, {description: 'Get user\'s roles. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async roles(@CurrentUser() user: User): Promise<string[]> {
+  async roles(
+    @Root() user: User,
+  ): Promise<string[]> {
     return await this.userService.getUserRoleNames(user);
   }
 
   @Mutation(() => User, {description: 'Create a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async createUser(@Args('input') input: UserInput) {
+  async createUser(@Args('input', new ValidationPipe()) input: UserInput) {
     return this.userService.create(input);
   }
 
   @Mutation(() => User, {description: 'Update a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateUser(@Args('id') id: string, @Args('input') input: UserInput) {
-    return this.userService.update(id, input);
+  async updateUser(@Args('user', new ValidationPipe()) user: UserInput) {
+    return this.userService.update(user.id, user);
   }
 
   @Mutation(() => User, {description: 'Update the current authenticated user. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateMe(@CurrentUser() user: User, @Args('input') input: UserInput) {
-    return this.userService.update(user.id, input);
+  async updateMe(@CurrentUser() user: User, @Args('userData', new ValidationPipe()) userData: UserInput) {
+    return this.userService.update(user.id, userData);
   }
 
   @Mutation(() => User, {description: 'Delete a user. Access roles:[root, usermanager]'})

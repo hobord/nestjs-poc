@@ -55,12 +55,13 @@ export class ExampleRepository implements IExampleRepository {
     this.repository.delete(model);
     return model;
   }
-  async update(id: string, example: IExample): Promise<IExample> {
+  async update(exampleId: string, exampleData: IExample): Promise<IExample> {
+    const { id, ...data } = exampleData;
     const updateData = {
-      ...example,
+      ...data,
       updateAt: new Date(),
     };
-    let model = await this.repository.findOne(id);
+    let model = await this.repository.findOne(exampleId);
     model = Object.assign(model, updateData);
     return this.repository.save(model);
   }

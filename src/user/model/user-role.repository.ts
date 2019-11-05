@@ -24,7 +24,7 @@ export class UserRoleRepository implements IUserRoleRepository {
     }
 
     const userRole = this.createUserRoleModel({
-      userId: user.id,
+      userID: user.id,
       roleName,
     });
     await this.repository.save(userRole);
@@ -34,7 +34,7 @@ export class UserRoleRepository implements IUserRoleRepository {
   createUserRoleModel(data?: Partial<UserRoleModel>): UserRoleModel {
     const now = new Date();
     const createData = {
-      userId: data.userId,
+      userID: data.userID,
       roleName: data.roleName,
       createAt: now,
     };
@@ -46,7 +46,7 @@ export class UserRoleRepository implements IUserRoleRepository {
     try {
       return (await this.repository.find({
         where: {
-          userId: user.id,
+          userID: user.id,
         },
       })) as UserRoleModel[];
     } catch (error) {
@@ -56,7 +56,7 @@ export class UserRoleRepository implements IUserRoleRepository {
 
   async removeRoleFromUser(roleName: string, user: IUser): Promise<IUserRole> {
     const model = await this.repository.findOne({
-      userId: user.id,
+      userID: user.id,
       roleName,
     });
     this.repository.delete(model);

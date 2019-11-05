@@ -57,7 +57,7 @@ services:
     ports:
       - "9080:80"
   nest-app:
-    image: node
+    image: node:12
     # build:
     #   context: .
     #   dockerfile: Dockerfile
