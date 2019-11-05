@@ -6,7 +6,7 @@ import {
   ResolveProperty,
   Root,
 } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, ValidationPipe } from '@nestjs/common';
 import { User } from './dto/user.dto';
 import { UserInput } from './dto/input-user.input';
 import { UserService } from './user.service';
@@ -62,21 +62,21 @@ export class UserResolver {
   @Mutation(() => User, {description: 'Create a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async createUser(@Args('input') input: UserInput) {
+  async createUser(@Args('input', new ValidationPipe()) input: UserInput) {
     return this.userService.create(input);
   }
 
   @Mutation(() => User, {description: 'Update a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateUser(@Args('user') user: UserInput) {
+  async updateUser(@Args('user', new ValidationPipe()) user: UserInput) {
     return this.userService.update(user.id, user);
   }
 
   @Mutation(() => User, {description: 'Update the current authenticated user. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateMe(@CurrentUser() user: User, @Args('userData') userData: UserInput) {
+  async updateMe(@CurrentUser() user: User, @Args('userData', new ValidationPipe()) userData: UserInput) {
     return this.userService.update(user.id, userData);
   }
 

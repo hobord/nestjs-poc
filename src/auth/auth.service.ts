@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { IUser } from '../user/interfaces/user.interface';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { Logger } from 'winston';
+import { AuthResult } from './dto/auth-result.dto';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IUser) {
+  async getJwtToken(user: IUser): Promise<AuthResult> {
     const payload = {
       sub: user.id,
       name: user.name,
@@ -34,6 +35,9 @@ export class AuthService {
     } as JwtPayload;
     return {
       access_token: this.jwtService.sign(payload),
+      refresh_token: this.jwtService.sign(payload, {
+        expiresIn: 7200,
+      }),
     };
   }
 }

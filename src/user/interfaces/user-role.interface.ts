@@ -1,7 +1,7 @@
 
 export interface IUserRole {
   id?: string;
-  userId?: string;
+  userID?: string;
   roleName: string;
   createAt: Date;
 }

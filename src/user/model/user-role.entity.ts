@@ -7,7 +7,7 @@ export class UserRoleModel implements IUserRole {
   id?: string;
 
   @Column()
-  userId: string;
+  userID: string;
 
   @Column()
   roleName: string;

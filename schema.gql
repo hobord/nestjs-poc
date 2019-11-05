@@ -9,7 +9,7 @@ type AuthResult {
   access_token: String!
 }
 
-"""Date custom scalar type"""
+"""Date custom scalar type (timestamp)"""
 scalar Date
 
 type Example {

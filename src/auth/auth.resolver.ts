@@ -23,14 +23,14 @@ export class AuthResolver {
     @Args('password') password: string,
   ) {
     const user = await this.authService.validateUser(username,  password);
-    return this.authService.login(user);
+    return this.authService.getJwtToken(user);
   }
 
   @Mutation(() => AuthResult, {description: 'Renew the jwt token'})
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
   @Roles('authenticated')
   async refreshToken(@CurrentUser() user: User) {
-    return this.authService.login(user);
+    return this.authService.getJwtToken(user);
   }
 
   @Query(() => [Role], {description: 'Get all roles names what are exists in the system'})
