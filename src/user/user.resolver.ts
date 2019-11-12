@@ -16,15 +16,18 @@ import { GqlRolesGuard } from '../auth/graphql-roles.guard';
 import { Roles } from '../auth/roles.decoraqtor';
 import { PaginateInput } from '../common/pagination/paginate.input';
 import { OrderByInput } from '../common/order/order-by.input';
+import { UserCreateInput } from './dto/user-create.input';
+import { UserUpdateInput } from './dto/user-update.input';
+import { UserUpdateMeInput } from './dto/user-update-me.input';
 
 @Resolver(of => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => String, {description: 'example query'})
-  async userHello() {
-    return 'hello';
-  }
+  // @Query(() => String, {description: 'example query'})
+  // async userHello() {
+  //   return 'hello';
+  // }
 
   @Query(returns => User, {description: 'Get the current authenticated user. Access roles:[authenticated]'})
   @Roles('authenticated')
@@ -62,22 +65,26 @@ export class UserResolver {
   @Mutation(() => User, {description: 'Create a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async createUser(@Args('input', new ValidationPipe()) input: UserInput) {
+  async createUser(@Args('input', new ValidationPipe()) input: UserCreateInput) {
     return this.userService.create(input);
   }
 
   @Mutation(() => User, {description: 'Update a user. Access roles:[root, usermanager]'})
   @Roles('root', 'usermanager')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateUser(@Args('user', new ValidationPipe()) user: UserInput) {
-    return this.userService.update(user.id, user);
+  async updateUser(@Args('user', new ValidationPipe()) user: UserUpdateInput) {
+    return this.userService.update(user);
   }
 
   @Mutation(() => User, {description: 'Update the current authenticated user. Access roles:[authenticated]'})
   @Roles('authenticated')
   @UseGuards(GqlAuthGuard, GqlRolesGuard)
-  async updateMe(@CurrentUser() user: User, @Args('userData', new ValidationPipe()) userData: UserInput) {
-    return this.userService.update(user.id, userData);
+  async updateMe(@CurrentUser() user: User, @Args('userData', new ValidationPipe()) userData: UserUpdateMeInput) {
+    const updateData = {
+      id: user.id,
+      ...userData,
+    };
+    return this.userService.update(updateData);
   }
 
   @Mutation(() => User, {description: 'Delete a user. Access roles:[root, usermanager]'})
@@ -94,7 +101,7 @@ export class UserResolver {
     @Args('roleName') roleName: string,
     @Args('user') userInput: UserInput,
   ) {
-    const user = await this.userService.getByID(userInput.email);
+    const user = await this.userService.getByID(userInput.id);
     return this.userService.addUserRole(user, roleName);
   }
 
@@ -105,7 +112,7 @@ export class UserResolver {
     @Args('roleName') roleName: string,
     @Args('user') userInput: UserInput,
   ) {
-    const user = await this.userService.getByID(userInput.email);
+    const user = await this.userService.getByID(userInput.id);
     return this.userService.removeUserRole(user, roleName);
   }
 }

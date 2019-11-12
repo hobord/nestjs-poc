@@ -7,6 +7,8 @@ import * as argon2 from 'argon2';
 import { UserRoleRepository } from './model/user-role.repository';
 import { IPaginate } from '../common/pagination/paginate.interface';
 import { IOrderByInput } from '../common/order/order-by.input.interface';
+import { UserUpdateInput } from './dto/user-update.input';
+import { UserCreateInput } from './dto/user-create.input';
 
 @Injectable()
 export class UserService {
@@ -18,26 +20,33 @@ export class UserService {
     private readonly roleRepository: UserRoleRepository,
   ) {}
 
-  async create(createUserDto: UserInput): Promise<IUser> {
-    createUserDto.passwordHash = await this.getHash(createUserDto.password);
+  async create(createUserDto: UserCreateInput): Promise<IUser> {
+    const updateData = {
+      ...createUserDto,
+    } as UserInput;
+    updateData.passwordHash = await this.getHash(createUserDto.password);
 
     // clear  password as we don't persist passwords
-    createUserDto.password = undefined;
+    updateData.password = undefined;
 
-    const user = await this.repository.create(createUserDto);
+    const user = await this.repository.create(updateData);
 
-    if (createUserDto.roles && createUserDto.roles.length > 0) {
-      for (const role of createUserDto.roles) {
+    if (updateData.roles && updateData.roles.length > 0) {
+      for (const role of updateData.roles) {
         await this.addUserRole(user, role);
       }
     }
+    user.roles = await this.getUserRoleNames(user);
 
     return user;
   }
 
   async getAll(paginate?: IPaginate, orderBy?: IOrderByInput[]): Promise<IUser[]> {
     const users = await this.repository.getAll(paginate, orderBy);
-    users.map(user => delete user.passwordHash);
+    users.map(async user => {
+      delete user.passwordHash;
+      user.roles = await this.getUserRoleNames(user);
+    });
     return users;
   }
 
@@ -45,6 +54,7 @@ export class UserService {
     const user = await this.repository.getByID(id);
     if (user) {
       delete user.passwordHash;
+      user.roles = await this.getUserRoleNames(user);
     }
     return user;
   }
@@ -53,6 +63,7 @@ export class UserService {
     const user = await this.repository.getByEmail(email);
     if (user) {
       delete user.passwordHash;
+      user.roles = await this.getUserRoleNames(user);
     }
     return user;
   }
@@ -65,10 +76,18 @@ export class UserService {
     return user;
   }
 
-  async update(id: string, userInput: UserInput): Promise<IUser> {
-    const user = await this.repository.update(id, userInput);
+  async update(userInput: UserUpdateInput): Promise<IUser> {
+    const updateData = {
+      ...userInput,
+    } as UserInput;
+    if (userInput.password) {
+      updateData.passwordHash = await this.getHash(userInput.password);
+    }
+
+    const user = await this.repository.update(userInput.id, updateData);
     if (user) {
       delete user.passwordHash;
+      user.roles = await this.getUserRoleNames(user);
     }
     return user;
   }
