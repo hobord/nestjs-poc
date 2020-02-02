@@ -3,35 +3,38 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""Authentication input for JWT token"""
+type AuthInput {
+  """username"""
+  username: String!
+
+  """password"""
+  password: String!
+}
+
 """Authentication response with JWT token"""
 type AuthResult {
   """JWT token"""
   access_token: String!
+
+  """JWT refresh token"""
+  refresh_token: String!
 }
 
-"""Date custom scalar type (timestamp)"""
-scalar Date
-
-type Example {
-  id: ID!
-  title: String
-  createAt: Date
-  updateAt: Date
-}
-
-input ExampleInput {
-  title: String!
-}
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
 
 type Mutation {
   """Create a user. Access roles:[root, usermanager]"""
-  createUser(input: UserInput!): User!
+  createUser(input: UserCreateInput!): User!
 
   """Update a user. Access roles:[root, usermanager]"""
-  updateUser(user: UserInput!): User!
+  updateUser(user: UserUpdateInput!): User!
 
   """Update the current authenticated user. Access roles:[authenticated]"""
-  updateMe(userData: UserInput!): User!
+  updateMe(userData: UserUpdateMeInput!): User!
 
   """Delete a user. Access roles:[root, usermanager]"""
   deleteUser(id: String!): User!
@@ -45,15 +48,15 @@ type Mutation {
   Revoke a permission role into the user. Access roles:[root, usermanager]
   """
   removeRoleFromUser(user: UserInput!, roleName: String!): User!
-  createExample(input: ExampleInput!): Example!
-  updateExample(input: ExampleInput!, id: String!): Example!
-  deleteExample(id: String!): Example!
 
   """Login into the system"""
   login(password: String!, username: String!): AuthResult!
 
   """Renew the jwt token"""
   refreshToken: AuthResult!
+
+  """Update the current authenticated user. Access roles:[authenticated]"""
+  updateMyPassword(input: UserChangeMyPasswordInput!): UserChangeMyPasswordResponse!
 }
 
 """order by column property in lists"""
@@ -69,9 +72,6 @@ input PaginateInput {
 }
 
 type Query {
-  """example query"""
-  userHello: String!
-
   """Get the current authenticated user. Access roles:[authenticated]"""
   whoAmI: User!
 
@@ -80,8 +80,6 @@ type Query {
 
   """Get user by id. Access roles:[authenticated]"""
   user(id: String!): User!
-  examples(orderby: [OrderByInput!], paginate: PaginateInput): [Example!]
-  example(id: String!): Example
 
   """Get all roles names what are exists in the system"""
   authRoles: [Role!]!
@@ -101,18 +99,56 @@ type User {
 
   """assigned security roles"""
   roles: [String!]
-  createAt: Date
-  updateAt: Date
+  createAt: DateTime
+  updateAt: DateTime
+}
+
+input UserChangeMyPasswordInput {
+  """User current password"""
+  currentPassword: String!
+
+  """User new password"""
+  newPassword: String!
+}
+
+type UserChangeMyPasswordResponse {
+  """User current password change was successfull"""
+  success: Boolean!
+}
+
+input UserCreateInput {
+  email: String!
+  name: String
+  password: String!
+
+  """assigned security roles"""
+  roles: [String!]
 }
 
 input UserInput {
   """UUID of user"""
-  id: String
-  email: String!
+  id: String!
+
+  """Users email"""
+  email: String
   name: String
-  password: String
-  passwordHash: String
 
   """assigned security roles"""
   roles: [String!]
+}
+
+input UserUpdateInput {
+  """UUID of user"""
+  id: String!
+  email: String
+  name: String
+  password: String
+
+  """assigned security roles"""
+  roles: [String!]
+}
+
+input UserUpdateMeInput {
+  email: String
+  name: String
 }

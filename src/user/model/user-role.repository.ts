@@ -59,7 +59,7 @@ export class UserRoleRepository implements IUserRoleRepository {
       userID: user.id,
       roleName,
     });
-    this.repository.delete(model);
+    await this.repository.delete(model);
     return model;
   }
 }

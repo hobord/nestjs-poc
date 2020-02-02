@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { WinstonModule } from 'nest-winston';
 import { GraphqlConfigService } from './config/graphql-config.service';
-import { ExampleModule } from './example/example.module';
 import { AuthModule } from './auth/auth.module';
 import { WinstonConfig } from './config/winston-config';
 import { DatabaseProviderModule } from './database/database-provider.module';
@@ -21,7 +20,6 @@ import { DatabaseProviderModule } from './database/database-provider.module';
     GraphQLModule.forRootAsync({
       useClass: GraphqlConfigService,
     }),
-    ExampleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

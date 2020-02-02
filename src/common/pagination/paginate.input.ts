@@ -7,5 +7,5 @@ export class PaginateInput implements IPaginate {
   readonly limit: number;
 
   @Field({ nullable: true })
-  offset?: number;
+  readonly offset?: number;
 }

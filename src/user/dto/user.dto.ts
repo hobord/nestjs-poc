@@ -4,7 +4,6 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 @ObjectType()
 export class User {
-
   @Field(() => ID, {description: 'UUID'})
   @IsString()
   @ApiModelProperty({nullable: false, description: 'UUID of user'})

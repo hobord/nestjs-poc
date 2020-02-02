@@ -55,6 +55,7 @@ export class GraphqlConfigService implements GqlOptionsFactory {
       //   return mergeSchemas({ schemas: [schema], schemaDirectives });
       // },
       context: ({res, req}) => {
+        res.header('Cache-Control', 'no-cache');
         if (toBool(getOsEnv('GRAPHQL_DEBUG'))) {
           requestStartTime = new Date();
           this.logger.log('debug', 'Request#: ' + requestCount++);

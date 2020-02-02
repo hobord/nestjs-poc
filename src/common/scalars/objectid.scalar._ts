@@ -1,6 +1,5 @@
 import { Scalar } from '@nestjs/graphql';
 import { Kind } from 'graphql';
-import { ObjectID } from 'mongodb';
 
 @Scalar('ObjectID')
 export class ObjectidScalar {

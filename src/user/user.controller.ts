@@ -2,10 +2,11 @@ import { Controller, Get,  Request, UseGuards, Post, Param, Body, Put, Delete, H
 import { UserService } from './user.service';
 import { Roles } from '../auth/roles.decoraqtor';
 import { RestRolesGuard } from '../auth/rest-roles.guard';
-import { UserInput } from './dto/input-user.input';
 import { ApiBearerAuth, ApiUseTags, ApiOperation, ApiImplicitHeader, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { User } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { UserUpdateInput } from './dto/user-update.input';
+import { UserCreateInput } from './dto/user-create.input';
 
 @Controller('users')
 @ApiUseTags('users')
@@ -61,7 +62,7 @@ export class UserController {
   @ApiUnauthorizedResponse({})
   @Roles('root', 'usermanager')
   @UseGuards(AuthGuard('jwt'), RestRolesGuard)
-  async create(@Body() createUserDto: UserInput) {
+  async create(@Body() createUserDto: UserCreateInput) {
     const user = await this.userService.create(createUserDto);
     return user;
   }
@@ -73,8 +74,8 @@ export class UserController {
   @ApiOkResponse({ description: 'Success.', type: User })
   @Roles('root', 'usermanager')
   @UseGuards(AuthGuard('jwt'), RestRolesGuard)
-  async update(@Param('id') id, @Body() updateUser: UserInput) {
-    const user = await this.userService.update(id, updateUser);
+  async update(@Param('id') id, @Body() updateUser: UserUpdateInput) {
+    const user = await this.userService.update(updateUser);
     return user;
   }
 

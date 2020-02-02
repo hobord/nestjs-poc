@@ -40,4 +40,8 @@ export class AuthService {
       }),
     };
   }
+
+  async updatePassword(user: IUser, password: string) {
+    return this.usersService.updatePassword(user, password);
+  }
 }
